@@ -1,6 +1,8 @@
 //
 // Created by edik on 09.06.22.
 //
+// TODO: Переделать хранение клавиатур в боте, с Commandrecorder'a, на какое-нибудь другое. Хотя впрочем оно хранится в хипе. Мб указатели куда вынести,
+//  ебучие shared_ptr
 
 #ifndef TGBOT_TEST_COMMANDRECORDER_H
 #define TGBOT_TEST_COMMANDRECORDER_H

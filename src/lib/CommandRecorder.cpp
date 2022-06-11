@@ -29,7 +29,11 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot) : mainKeyboard(new ReplyKeyboa
 
     //test---------------------------------------
     commands.emplace_back("test");
-    KeyboardGenerator::createInlineColumnKeyboard({"t1","t2","t3"}, testInlineKeyboard);
+    KeyboardGenerator::createInlineKeyboard({
+                                                    {"1", "2", "3"},
+                                                    {"4", "5", "6"},
+                                                    {"7", "8", "9"},
+                                            }, testInlineKeyboard);
 
     bot.getEvents().onCommand("test", [&bot, this](const Message::Ptr &message) {
         bot.getApi().sendMessage(message->chat->id,
