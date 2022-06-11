@@ -1,0 +1,6 @@
+[requires]
+tgbot/1.3
+
+[generators]
+CMakeDeps
+CMakeToolchain
