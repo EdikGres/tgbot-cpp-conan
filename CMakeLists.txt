@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(tgbot)
 
-add_executable(kostya_bot main.cpp)
+add_executable(kostya_bot src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} tgbot::tgbot)
