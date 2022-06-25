@@ -27,11 +27,9 @@ int main() {
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
 
-    cout << db.getCurMenu(307278021)  << " - return\n" << endl;
-    db.setCurMenu(307278021, 11);
-    db.setAccessLevel(307278021, 98);
-    cout << db.getCurMenu(123)  << " - return\n" << endl;
-    db.setCurMenu(123, 9);
+    cout << db.getLanguage(307278021) << endl;
+    db.setLanguage(307278021, 7);
+    cout << db.getLanguage(307278021) << endl;
 
 
     //exit(15);

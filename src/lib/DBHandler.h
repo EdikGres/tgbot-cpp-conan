@@ -29,7 +29,7 @@ public:
     DBHandler(const char *host, const char *user, const char *passwd, const char *db, unsigned int port,
               const char *unixSocket, unsigned long clientflag);
 
-    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level);
+    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level, int language);
 
     bool hasUser(int64_t tg_id);
 
@@ -39,9 +39,15 @@ public:
 
     int getAccessLevel(int64_t tg_id);
 
+    int getLanguage(int64_t tg_id);
+
     void setCurMenu(int64_t tg_id, int cur_menu);
 
     void setAccessLevel(int64_t tg_id, int cur_level);
+
+    void setLanguage(int64_t tg_id, int cur_language);
+
+
 };
 
 

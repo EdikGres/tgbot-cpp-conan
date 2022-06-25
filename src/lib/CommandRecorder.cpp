@@ -29,7 +29,7 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db) : db(db), mainK
                                  "/start for one column keyboard\n/layout for a more complex keyboard", false, 0,
                                  mainKeyboard);
 
-        db.add_user(message->from->id, message->from->username, 0, 0);
+        db.add_user(message->from->id, message->from->username, 0, 0, 0);
     });
 
     //test---------------------------------------
