@@ -1,22 +1,44 @@
-#include <csignal>
-#include <cstdio>
-#include <cstdlib>
-#include <exception>
-#include <string>
+#include <stdlib.h>
+#include <iostream>
 #include <vector>
 #include <tgbot/tgbot.h>
 #include "lib/CommandRecorder.h"
+#include <mysql.h>
+#include "lib/DBHandler.h"
+
+#include <iostream>
 
 using namespace std;
 using namespace TgBot;
+
+
+void finish_with_error(MYSQL *con) {
+    fprintf(stderr, "%s\n", mysql_error(con));
+    mysql_close(con);
+    exit(1);
+}
 
 int main() {
     string token(getenv("TOKEN"));
     printf("Token: %s\n", token.c_str());
 
+
+
+    DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
+                 "telegram", 3306, NULL, 0);
+
+    cout << db.getCurMenu(307278021)  << " - return\n" << endl;
+    db.setCurMenu(307278021, 11);
+    db.setAccessLevel(307278021, 98);
+    cout << db.getCurMenu(123)  << " - return\n" << endl;
+    db.setCurMenu(123, 9);
+
+
+    //exit(15);
+
     Bot bot(token);
 
-    CommandRecorder recorder(bot);
+    CommandRecorder recorder(bot, db);
 
 
     signal(SIGINT, [](int s) {

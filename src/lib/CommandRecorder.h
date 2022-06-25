@@ -10,15 +10,17 @@
 #include <tgbot/tgbot.h>
 #include <vector>
 #include <string>
+#include "DBHandler.h"
 
 using namespace std;
 
 class CommandRecorder {
 public:
-    explicit CommandRecorder(TgBot::Bot &bot);
+    explicit CommandRecorder(TgBot::Bot &bot, DBHandler &db);
 
 private:
     vector<string> commands;
+    DBHandler &db;
     TgBot::ReplyKeyboardMarkup::Ptr mainKeyboard;
     TgBot::ReplyKeyboardMarkup::Ptr testKeyboard;
     TgBot::InlineKeyboardMarkup::Ptr testInlineKeyboard;
