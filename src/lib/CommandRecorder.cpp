@@ -4,33 +4,53 @@
 
 #include "CommandRecorder.h"
 #include "KeyboardGenerator.h"
+#include <thread>
 
 
 using namespace std;
 using namespace TgBot;
 
 
-CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db) : db(db), mainKeyboard(new ReplyKeyboardMarkup),
+CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb), mainKeyboard(new ReplyKeyboardMarkup),
                                                                    testKeyboard(new ReplyKeyboardMarkup),
                                                                    testInlineKeyboard(new InlineKeyboardMarkup) {
     //start-------------------------------------
     commands.emplace_back("start");
     mainKeyboard->resizeKeyboard = true;
     mainKeyboard->oneTimeKeyboard = true;
-    KeyboardGenerator::createKeyboard({
-                                              {"Открыть стол", "О проекте"},
-                                              {"Презентация",  "Мой статус"},
-                                              {"Реф ссылка",   "Тех. поддержка"},
-                                      }, mainKeyboard);
-    bot.getEvents().onCommand("start", [&bot, &db, this](const Message::Ptr &message) {
+    bot.getEvents().onCommand("start", [&bot, &db, this, &sb](const Message::Ptr &message) {
 
+        thread t1([&bot, &db, this, &sb, message](){
 
-        bot.getApi().sendMessage(message->chat->id,
-                                 "/start for one column keyboard\n/layout for a more complex keyboard", false, 0,
-                                 mainKeyboard);
-
-        db.add_user(message->from->id, message->from->username, 0, 0, 0);
+            db.add_user(message->from->id, message->from->username, 0, 0, 0);
+            db.setCurMenu(message->from->id, 0);
+            const int lang = db.getLanguage(message->from->id);
+            unordered_map<string,string>* text;
+            switch (lang) {
+                case 0:
+                    text = sb.getRu();
+                    break;
+                case 1:
+                    text = sb.getEn();
+                    break;
+                default:
+                    text = sb.getRu();
+                    break;
+            }
+            KeyboardGenerator::createKeyboard({
+                                                      {text->at("training for beginners"), text->at("training for teachers")},
+                                                      {text->at("training for leaders"),  text->at("training for TOP-leaders")},
+                                                      {text->at("team rules"),   text->at("events and training")},
+                                                      {text->at("mentors and focus groups"),   text->at("testing")},
+                                                      {text->at("materials")},
+                                              }, mainKeyboard);
+            bot.getApi().sendMessage(message->chat->id,
+                                     text->at("start-message"), false, 0,
+                                     mainKeyboard);
+        });
+        t1.detach();
     });
+
 
     //test---------------------------------------
     commands.emplace_back("test");

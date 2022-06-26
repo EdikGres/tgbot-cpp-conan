@@ -1,29 +1,29 @@
 #/start message
-"start-message" : "Добро пожаловать в (Название)";
+"start-message" : "Welcome to (name)";
 #start-menu
-"training for beginners" : "Обучение для новичков";
-"training for teachers" : "Обучение для наставников";
-"training for leaders" : "Обучение для лидеров";
-"training for TOP-leaders" : "Обучение для ТОП лидеров";
-"materials" : "Материалы";
-"testing" : "Тестирование";
-"team rules" : "Правила команды";
-"events and training" : "Мероприятия и обучения";
-"mentors and focus groups" : "Наставники и фокус-группы";
+"training for beginners" : "Training for beginners";
+"training for teachers" : "Training for teachers";
+"training for leaders" : "Training for leaders";
+"training for TOP-leaders" : "Training for TOP-leaders";
+"materials" : "Materials";
+"testing" : "Testing";
+"team rules" : "Team rules";
+"events and training" : "Events and training";
+"mentors and focus groups" : "Mentors and focus groups";
 
 #for beginners
-"start learning" : "Начать обучение";
-"back" : "Назад";
-"next" : "Вперёд";
-"text-beginners-1" : "текст1";
-"text-beginners-2" : "текст2";
-"text-beginners-3" : "текст3";
+"start learning" : "Start learning";
+"back" : "Back";
+"next" : "Next";
+"text-beginners-1" : "text1";
+"text-beginners-2" : "text2";
+"text-beginners-3" : "text3";
 
 #for teachers
-"checklist for mentors" : "Чек-лист для наставников";
-"text-teachers-1" : "текст1";
-"text-teachers-2" : "текст2";
-"text-teachers-3" : "текст3";
+"checklist for mentors" : "Checklist for mentors";
+"text-teachers-1" : "text1";
+"text-teachers-2" : "text2";
+"text-teachers-3" : "text3";
 
 ##materials
 "PDF presentation (pdf file)" : "";

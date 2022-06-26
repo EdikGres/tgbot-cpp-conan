@@ -14,12 +14,14 @@ class StringParser {
 public:
     StringParser(string &filename);
 
+
     ~StringParser();
 
     int changeFile(string &file);
 
+    unordered_map<string, string> *getTmp() const;
 
-    unordered_map<string,string>* parseFile();
+    unordered_map<string, string> *parseFile();
 
 private:
     unordered_map<string, string> *tmp;

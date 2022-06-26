@@ -6,8 +6,10 @@
 #include <mysql.h>
 #include "lib/DBHandler.h"
 #include "driver/StringParser.h"
-
+#include "driver/StringBuilder.h"
 #include <iostream>
+
+//TODO: Сделать удаление сообщений в боте(чата?)
 
 using namespace std;
 using namespace TgBot;
@@ -23,10 +25,10 @@ int main() {
     string token(getenv("TOKEN"));
     printf("Token: %s\n", token.c_str());
 
-    string filename("../locale/ru.lang");
-    StringParser sp(filename);
 
-    sp.parseFile();
+
+    string files[] = {"../locale/ru.lang", "../locale/en.lang"};
+    StringBuilder sb(files);
 
 
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
@@ -35,12 +37,9 @@ int main() {
 
 
 
-
-    exit(15);
-
     Bot bot(token);
 
-    CommandRecorder recorder(bot, db);
+    CommandRecorder recorder(bot, db, sb);
 
 
     signal(SIGINT, [](int s) {

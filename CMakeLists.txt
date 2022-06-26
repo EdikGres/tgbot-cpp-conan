@@ -13,7 +13,7 @@ link_directories("/usr/lib/x86_64-linux-gnu/libmysqlclient.so")
 #link_directories("/usr/lib/x86_64-linux-gnu/libmysqlcppconn-static.a"  )
 link_directories("/usr/lib/x86_64-linux-gnu/libmysqlclient.a")
 
-add_executable(kostya_bot src/main.cpp src/lib/CommandRecorder.h src/lib/CommandRecorder.cpp src/lib/KeyboardGenerator.h src/lib/KeyboardGenerator.cpp src/lib/DBHandler.cpp src/lib/DBHandler.h src/driver/StringParser.cpp src/driver/StringParser.h)
+add_executable(kostya_bot src/main.cpp src/lib/CommandRecorder.h src/lib/CommandRecorder.cpp src/lib/KeyboardGenerator.h src/lib/KeyboardGenerator.cpp src/lib/DBHandler.cpp src/lib/DBHandler.h src/driver/StringParser.cpp src/driver/StringParser.h src/driver/StringBuilder.cpp src/driver/StringBuilder.h)
 
 target_link_libraries(kostya_bot libmysqlclient.so)
 #target_link_libraries(${PROJECT_NAME} mariadb-connector-c::mariadb-connector-c)

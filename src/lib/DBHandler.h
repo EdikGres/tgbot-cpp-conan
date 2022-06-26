@@ -1,6 +1,7 @@
 //
 // Created by root on 25.06.22.
 //
+//TODO: Сделать деструктор класса
 
 #ifndef KOSTYA_BOT_DBHANDLER_H
 #define KOSTYA_BOT_DBHANDLER_H
