@@ -5,6 +5,7 @@
 #include "lib/CommandRecorder.h"
 #include <mysql.h>
 #include "lib/DBHandler.h"
+#include "driver/StringParser.h"
 
 #include <iostream>
 
@@ -22,17 +23,20 @@ int main() {
     string token(getenv("TOKEN"));
     printf("Token: %s\n", token.c_str());
 
+    string filename("../locale/ru.lang");
+    StringParser sp(filename);
+
+    sp.parseFile();
 
 
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
 
-    cout << db.getLanguage(307278021) << endl;
-    db.setLanguage(307278021, 7);
-    cout << db.getLanguage(307278021) << endl;
 
 
-    //exit(15);
+
+
+    exit(15);
 
     Bot bot(token);
 
