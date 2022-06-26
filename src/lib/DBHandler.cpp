@@ -62,10 +62,11 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
         if (mysql_query(con, buffer)) {
             error_handle();
             free(buffer);
+            mysql_free_result(result);
             return 4;
         }
     }
-
+    mysql_free_result(result);
     free(buffer);
     return 0;
 }
@@ -87,6 +88,7 @@ bool DBHandler::hasUser(int64_t tg_id) {
         return false;
     }
 
+    mysql_free_result(result);
     free(buffer);
     return mysql_num_rows(result) > 0;
 }
@@ -107,6 +109,7 @@ bool DBHandler::hasUser(const string &name) {
         return false;
     }
 
+    mysql_free_result(result);
     free(buffer);
     return mysql_num_rows(result) > 0;
 }
@@ -127,6 +130,7 @@ int DBHandler::getCurMenu(int64_t tg_id) {
     }
     if (mysql_num_rows(result) == 0) {
         free(buffer);
+        mysql_free_result(result);
         return -1;
     }
 
@@ -155,6 +159,7 @@ int DBHandler::getAccessLevel(int64_t tg_id) {
     }
     if (mysql_num_rows(result) == 0) {
         free(buffer);
+        mysql_free_result(result);
         return -1;
     }
 
@@ -183,6 +188,7 @@ int DBHandler::getLanguage(int64_t tg_id) {
     }
     if (mysql_num_rows(result) == 0) {
         free(buffer);
+        mysql_free_result(result);
         return -1;
     }
 

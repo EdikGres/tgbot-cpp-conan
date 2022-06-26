@@ -8,8 +8,9 @@
 #include "driver/StringParser.h"
 #include "driver/StringBuilder.h"
 #include <iostream>
-
+//TODO: mysql_store_result пофиксил утечку, нужно всё проверить 100500 раз
 //TODO: Сделать удаление сообщений в боте(чата?)
+//TODO: исправить пути для языков
 
 using namespace std;
 using namespace TgBot;
