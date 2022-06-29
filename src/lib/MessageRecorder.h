@@ -22,6 +22,12 @@ private:
     DBHandler &db;
     StringBuilder &sb;
 
+    TgBot::InlineKeyboardMarkup::Ptr inlineGMP;
+    TgBot::ReplyKeyboardMarkup::Ptr keyb;
+
+    const string GMP_photoPath = "../img/GMP.jpg";
+    const string GMP_photoMimeType = "image/jpeg";
+    InputMediaPhoto::Ptr media;
 };
 
 

@@ -10,8 +10,9 @@
 "RU" : "🇷🇺 Русский";
 "start-successful" : "Language set successfully 🇬🇧";
 
-
 #after start menu
+"text-GMP" : "Napolnenie GMP bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+"text-GMP-beginners" : "Fillings for beginners";
 "training for beginners" : "Training for beginners";
 "training for teachers" : "Training for teachers";
 "training for leaders" : "Training for leaders";
@@ -26,9 +27,11 @@
 "start learning" : "Start learning";
 "back" : "Back";
 "next" : "Next";
+"text-menu-beginners" : "Content for training for beginners";
 "text-beginners-1" : "text1";
 "text-beginners-2" : "text2";
 "text-beginners-3" : "text3";
+"back-menu" : "Back to the menu";
 
 #for teachers
 "checklist for mentors" : "Checklist for mentors";

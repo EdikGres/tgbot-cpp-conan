@@ -8,10 +8,13 @@
 #include "driver/StringParser.h"
 #include "driver/StringBuilder.h"
 #include "lib/CallbackQueryRecorder.h"
+#include "lib/MessageRecorder.h"
+#include "driver/strings.h"
 //TODO: Сделать многопоточность для mysql
 //TODO: Сделать удаление сообщений в боте(чата?)
 //TODO: исправить пути для языков
 //TODO: обавить таймстамп к сообщению
+//TODO: Сделать mysql запрос на получение последний ид сообщения ( можно запросом WHERE max)
 
 
 using namespace std;
@@ -36,7 +39,7 @@ int main() {
 
 
     //change for deploy
-    string files[] = {"../locale/ru.lang", "../locale/en.lang"};
+    string files[] = {ru_locale, en_locale};
     StringBuilder sb(files);
 
 
@@ -49,6 +52,8 @@ int main() {
     CommandRecorder recorder(bot, db, sb);
 
     CallbackQueryRecorder recorder1(bot, db, sb);
+
+    MessageRecorder recorder2(bot, db, sb);
 
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");

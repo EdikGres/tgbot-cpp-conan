@@ -18,6 +18,7 @@ public:
     static void createOneRowKeyboard(const vector<string> &buttonStrings, ReplyKeyboardMarkup::Ptr &kb);
     static void createKeyboard(const vector<vector<string>> &buttonLayout, ReplyKeyboardMarkup::Ptr &kb);
     static void createInlineKeyboard(const vector<vector<string>> &buttons, InlineKeyboardMarkup::Ptr &kb);
+    static void createInlineKeyboard(const vector<vector<string>> &buttons, InlineKeyboardMarkup::Ptr &kb, string& postfix);
 private:
 
 
