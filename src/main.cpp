@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <tgbot/tgbot.h>
@@ -7,10 +7,12 @@
 #include "lib/DBHandler.h"
 #include "driver/StringParser.h"
 #include "driver/StringBuilder.h"
-#include <iostream>
-//TODO: mysql_store_result пофиксил утечку, нужно всё проверить 100500 раз
+#include "lib/CallbackQueryRecorder.h"
+//TODO: Сделать многопоточность для mysql
 //TODO: Сделать удаление сообщений в боте(чата?)
 //TODO: исправить пути для языков
+//TODO: обавить таймстамп к сообщению
+
 
 using namespace std;
 using namespace TgBot;
@@ -23,11 +25,17 @@ void finish_with_error(MYSQL *con) {
 }
 
 int main() {
+    if (getenv("TOKEN") == NULL || getenv("MYSQL_PASS") == NULL) {
+        cerr << "ERROR! environment values don't set!" << endl;
+        cerr << "TOKEN: " << getenv("TOKEN") << endl;
+        cerr << "MYSQL_PASS: " << getenv("MYSQL_PASS") << endl;
+        return -1;
+    }
     string token(getenv("TOKEN"));
     printf("Token: %s\n", token.c_str());
 
 
-
+    //change for deploy
     string files[] = {"../locale/ru.lang", "../locale/en.lang"};
     StringBuilder sb(files);
 
@@ -36,12 +44,11 @@ int main() {
                  "telegram", 3306, NULL, 0);
 
 
-
-
     Bot bot(token);
 
     CommandRecorder recorder(bot, db, sb);
 
+    CallbackQueryRecorder recorder1(bot, db, sb);
 
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");

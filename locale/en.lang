@@ -1,6 +1,17 @@
 #/start message
-"start-message" : "Welcome to (name)";
+"start-message" : "Welcome to (name) select training";
+
 #start-menu
+"GMP" : "GMP";
+"Cash-Flow" : "Cash Flow";
+
+#inline-start
+"UK" : "🇬🇧 English";
+"RU" : "🇷🇺 Русский";
+"start-successful" : "Language set successfully 🇬🇧";
+
+
+#after start menu
 "training for beginners" : "Training for beginners";
 "training for teachers" : "Training for teachers";
 "training for leaders" : "Training for leaders";
