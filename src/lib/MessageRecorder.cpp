@@ -10,14 +10,15 @@
 
 using namespace std;
 
-MessageRecorder::MessageRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb), inlineGMP(
-        new InlineKeyboardMarkup), media(new InputMediaPhoto), keyb(new ReplyKeyboardMarkup) {
+MessageRecorder::MessageRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb){
     bot.getEvents().onNonCommandMessage([&bot, &db, &sb, this](const Message::Ptr &message) {
         thread t1([&bot, &db, &sb, message, this]() {
             //GMP MENU=1
             if (StringTools::startsWith(message->text, "GMP")) {
                 //db.addMessage(message->from->id, message->messageId, 0);
+                //InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 unordered_map<string, string> *text = my::get_lang(db, sb, message);
+                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("training for beginners"), text->at(
                                                                         "training for teachers")},
@@ -28,21 +29,18 @@ MessageRecorder::MessageRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
                                                                 {text->at("team rules"),             text->at(
                                                                         "events and training")},
                                                                 {text->at("mentors and focus groups")}
-                                                        }, inlineGMP);
+                                                        }, keyb);
 
                 db.setCurMenu(message->from->id, 1);
                 //Message::Ptr msg;
                 //InputMediaPhoto::Ptr media(new InputMediaPhoto());
                 //media->media = "https://downloader.disk.yandex.ru/preview/61241fc476ae5969542b473d30ce83e8a274f611ab9d07bcbcbb241822568b28/62bd0299/2cZVERsdGNFHqEPJTA68j38xtNzgE25P95g6hF-QW3v6g7i8FGJ8KCLYAKmqHK-kVc6_QT6Fr1ZK35cLcDOYEg%3D%3D?uid=0&filename=GMP.jpg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v2&size=2048x2048";
                 //media->caption = "hwyerghwerg";
+                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                 media->media = "https://i.ibb.co/2NpKYJJ/GMP.jpg";
                 media->caption = "test";
 
-                keyb->resizeKeyboard = true;
-                keyb->oneTimeKeyboard = false;
-                KeyboardGenerator::createKeyboard({
-                                                          {"123", "1414"},
-                                                  }, keyb);
+
                 auto *l_msg = db.getMessages(message->from->id, 1);
                 if (l_msg == NULL)
                     return;
@@ -56,6 +54,8 @@ MessageRecorder::MessageRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
                 //my::delete_all_messages(db, sb, message, bot);
                 //db.addMessage(message->from->id, msg->messageId, 1);
                 //db.addMessage(message->from->id, msg2->messageId, 1);
+                delete(l_msg);
+                return;
             }
         });
         t1.detach();

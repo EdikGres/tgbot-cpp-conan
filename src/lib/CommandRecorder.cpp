@@ -3,6 +3,7 @@
 //
 //TODO: оптимизировать до 1го обращения к бд запросы в команде.
 //TODO: защитить /start от насилия ( возможно поставить мютексы)
+//TODO: можно в onUnknownCommand() убрать проверку с контейнера, поскольку это в либе реализовано уже.
 
 #include "CommandRecorder.h"
 #include "KeyboardGenerator.h"
@@ -15,28 +16,22 @@ using namespace std;
 using namespace TgBot;
 
 
-CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb), mainKeyboard(
-        new ReplyKeyboardMarkup),
-                                                                                      testKeyboard(
-                                                                                              new ReplyKeyboardMarkup),
-                                                                                      testInlineKeyboard(
-                                                                                              new InlineKeyboardMarkup) {
+CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb) {
     //start-------------------------------------
     commands.emplace_back("start");
-    mainKeyboard->resizeKeyboard = true;
-    mainKeyboard->oneTimeKeyboard = false;
     bot.getEvents().onCommand("start", [&bot, &db, this, &sb](const Message::Ptr &message) {
         thread t1([&bot, &db, this, &sb, message]() {
             db.add_user(message->from->id, message->from->username, 0, 0, 0);
             db.setCurMenu(message->from->id, 0);
             unordered_map<string, string> *text = my::get_lang(db, sb, message);
+            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
 //            KeyboardGenerator::createKeyboard({
 //                                                      {text->at("Cash-Flow"), text->at(
 //                                                              "GMP")},
 //                                              }, mainKeyboard);
             KeyboardGenerator::createInlineKeyboard({
                                                             {text->at("Cash-Flow"), text->at("GMP")}
-                                                    }, testInlineKeyboard);
+                                                    }, keyb);
             //language select
 //            KeyboardGenerator::createInlineKeyboard({
 //                                                            {text->at("UK"), text->at("RU")}
@@ -50,7 +45,7 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 //                                                         testInlineKeyboard);
 
             Message::Ptr msg = bot.getApi().sendPhoto(message->from->id, start_img, text->at("start-message"), 0,
-                                                      testInlineKeyboard, "",
+                                                      keyb, "HTML",
                                                       false);
             my::delete_all_messages(db, sb, message, bot);
             db.addMessage(message->from->id, msg->messageId, 1);
@@ -69,6 +64,7 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
         thread t1([&bot, &db, &sb, message, this]() {
             const int lang = db.getLanguage(message->from->id);
             unordered_map<string, string> *text;
+            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
             switch (lang) {
                 case 0:
                     text = sb.getRu();
@@ -82,11 +78,11 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             }
             KeyboardGenerator::createInlineKeyboard({
                                                             {text->at("UK"), text->at("RU")}
-                                                    }, testInlineKeyboard);
+                                                    }, keyb);
             bot.getApi().sendMessage(message->chat->id,
                                      "/start for one column keyboard\n/layout for a more complex keyboard", false,
                                      0,
-                                     testInlineKeyboard);
+                                     keyb);
         });
         t1.detach();
     });

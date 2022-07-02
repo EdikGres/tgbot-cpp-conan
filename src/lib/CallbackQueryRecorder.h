@@ -20,12 +20,6 @@ public:
 private:
     DBHandler &db;
     StringBuilder &sb;
-    TgBot::InlineKeyboardMarkup::Ptr languageInlineKeyboard;
-    TgBot::InlineKeyboardMarkup::Ptr beginnersStartInlineKeyboard;
-    TgBot::InlineKeyboardMarkup::Ptr inlineGMP;
-    TgBot::InlineKeyboardMarkup::Ptr NextBackInlineKeyboard;
-    TgBot::InlineKeyboardMarkup::Ptr NextMenuInlineKeyboard;
-    InputMediaPhoto::Ptr media;
 };
 
 

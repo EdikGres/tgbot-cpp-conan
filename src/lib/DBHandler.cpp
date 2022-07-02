@@ -3,6 +3,7 @@
 //
 //TODO: сделать работу с UTF-8 строками (например для русских имён
 //TODO: подумать над atoi мб поменять его на что-нибудь другое
+//TODO: setCurMenu сделать проверку на возврат, есть ли юзер и установилось ли
 
 #include <cstdio>
 #include <tgbot/tgbot.h>
@@ -103,10 +104,12 @@ bool DBHandler::hasUser(int64_t tg_id) {
         return false;
     }
 
+    bool ret = mysql_num_rows(result) > 0;
+
     mysql_free_result(result);
     free(buffer);
     m_mutex.unlock();
-    return mysql_num_rows(result) > 0;
+    return ret;
 }
 
 bool DBHandler::hasUser(const string &name) {
@@ -128,10 +131,12 @@ bool DBHandler::hasUser(const string &name) {
         return false;
     }
 
+    bool ret = mysql_num_rows(result) > 0;
+
     mysql_free_result(result);
     free(buffer);
     m_mutex.unlock();
-    return mysql_num_rows(result) > 0;
+    return ret;
 }
 
 int DBHandler::getCurMenu(int64_t tg_id) {

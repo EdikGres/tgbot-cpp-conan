@@ -21,9 +21,6 @@ private:
     vector<string> commands;
     DBHandler &db;
     StringBuilder &sb;
-    TgBot::ReplyKeyboardMarkup::Ptr mainKeyboard;
-    TgBot::ReplyKeyboardMarkup::Ptr testKeyboard;
-    TgBot::InlineKeyboardMarkup::Ptr testInlineKeyboard;
 
     const string start_photoPath = "../img/cat-start.jpeg";
     const string start_photoMimeType = "image/jpeg";

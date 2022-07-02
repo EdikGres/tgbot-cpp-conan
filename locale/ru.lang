@@ -1,5 +1,7 @@
 #/start message
-"start-message" : "Добро пожаловать в (Название) выберите обучение";
+"start-message" : "<b>Добро пожаловать</b> в (Название) выберите обучение";
+
+##"start-message" : "<b>bold</b>, <strong>bold</strong>";
 
 #start-menu
 "GMP" : "GMP";

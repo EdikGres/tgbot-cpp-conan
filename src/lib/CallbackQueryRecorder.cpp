@@ -10,17 +10,7 @@
 //TODO: Возможно перейти на стейтмашину, чтобы не париться за коллбеки.
 
 
-CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb),
-                                                                                                  languageInlineKeyboard(
-                                                                                                          new InlineKeyboardMarkup),
-                                                                                                  beginnersStartInlineKeyboard(
-                                                                                                          new InlineKeyboardMarkup),
-                                                                                                  NextBackInlineKeyboard(
-                                                                                                          new InlineKeyboardMarkup),
-                                                                                                  NextMenuInlineKeyboard(
-                                                                                                          new InlineKeyboardMarkup),
-                                                                                                  inlineGMP(
-                                                                                                          new InlineKeyboardMarkup), media(new InputMediaPhoto) {
+CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb) : db(db), sb(sb) {
 
 
     bot.getEvents().onCallbackQuery([&bot, &db, &sb, this](CallbackQuery::Ptr query) {
@@ -29,6 +19,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             int cur_menu = db.getCurMenu(query->from->id);
             //language
             if (StringTools::startsWith(query->data, text->at("UK"))) {
+                InlineKeyboardMarkup::Ptr languageInlineKeyboard(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("UK"), text->at("RU")}
                                                         }, languageInlineKeyboard);
@@ -47,9 +38,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     cerr << ex.what() << endl;
                 }
                 delete (l_msg);
+                return;
             }
             //language
             if (StringTools::startsWith(query->data, text->at("RU"))) {
+                InlineKeyboardMarkup::Ptr languageInlineKeyboard(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("UK"), text->at("RU")}
                                                         }, languageInlineKeyboard);
@@ -68,9 +61,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     cerr << ex.what() << endl;
                 }
                 delete (l_msg);
+                return;
             }
             //GMP MENU = 1
             if (StringTools::startsWith(query->data, text->at("GMP"))) {
+                InlineKeyboardMarkup::Ptr inlineGMP(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("training for beginners"), text->at(
                                                                         "training for teachers")},
@@ -83,6 +78,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                                 {text->at("mentors and focus groups")}
                                                         }, inlineGMP);
                 db.setCurMenu(query->from->id, 1);
+                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                 media->media = GMP_menu_img;
                 media->caption = text->at("text-GMP");
                 auto *l_msg = db.getMessages(query->from->id, 1);
@@ -90,12 +86,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     return;
                 int32_t msg = l_msg->back();
                 bot.getApi().editMessageMedia(media, query->from->id, msg, "", inlineGMP);
-                delete(l_msg);
+                delete (l_msg);
+                return;
             }
-
             //training for beginners menu  MENU=2
             if (StringTools::startsWith(query->data, text->at("training for beginners")) && cur_menu == 1) {
-                //string postfix = "beginners";
+                InlineKeyboardMarkup::Ptr beginnersStartInlineKeyboard(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("start learning"), text->at("back-menu")}
                                                         }, beginnersStartInlineKeyboard);
@@ -117,13 +113,17 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     cerr << ex.what() << endl;
                 }
                 delete (l_msg);
+                return;
             }
             //start learning
             if (StringTools::startsWith(query->data, text->at("start learning")) &&
                 db.getCurMenu(query->from->id) == 2) {
+
+                return;
             }
             if (StringTools::startsWith(query->data, text->at("back-menu")) && db.getCurMenu(query->from->id) == 2) {
                 db.setCurMenu(query->from->id, 1);
+                InlineKeyboardMarkup::Ptr inlineGMP(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("training for beginners"), text->at(
                                                                         "training for teachers")},
@@ -158,6 +158,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     cerr << ex.what() << endl;
                 }
                 delete (l_msg);
+                return;
             }
         });
         t1.detach();
