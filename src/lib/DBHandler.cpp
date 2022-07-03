@@ -4,9 +4,10 @@
 //TODO: сделать работу с UTF-8 строками (например для русских имён
 //TODO: подумать над atoi мб поменять его на что-нибудь другое
 //TODO: setCurMenu сделать проверку на возврат, есть ли юзер и установилось ли
+//TODO: потестить под valgrind'ом новые функции с текстом
 
 #include <cstdio>
-#include <tgbot/tgbot.h>
+#include <iostream>
 #include "DBHandler.h"
 
 DBHandler::DBHandler(const char *host, const char *user, const char *passwd, const char *db,
@@ -16,16 +17,16 @@ DBHandler::DBHandler(const char *host, const char *user, const char *passwd, con
                                                                                             unix_socket(unixSocket),
                                                                                             clientflag(clientflag) {
     mysql_library_init;
-    con = mysql_init(NULL);
-    if (con == NULL) {
+    con = mysql_init(nullptr);
+    if (con == nullptr) {
         fprintf(stderr, "%s\n", mysql_error(con));
-        exit(1);
+        exit(11);
     }
     if (mysql_real_connect(con, host, user, passwd,
-                           db, port, unix_socket, clientflag) == NULL) {
+                           db, port, unix_socket, clientflag) == nullptr) {
         fprintf(stderr, "%s\n", mysql_error(con));
         mysql_close(con);
-        exit(1);
+        exit(11);
     }
 }
 
@@ -52,7 +53,7 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
         return 1;
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT tg_id FROM users WHERE tg_id =%ld", tg_id);
+    sprintf(buffer, "SELECT tg_id FROM users WHERE tg_id =%lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -61,14 +62,14 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
     }
     MYSQL_RES *result = mysql_store_result(con);
 
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
         return 3;
     }
     if (mysql_num_rows(result) == 0) {
-        sprintf(buffer, "INSERT INTO users VALUES (NULL, %ld, '%s', %d, %d, %d)", tg_id, name.c_str(), cur_menu,
+        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, %d, %d)", tg_id, name.c_str(), cur_menu,
                 access_level, language);
         if (mysql_query(con, buffer)) {
             error_handle();
@@ -87,7 +88,7 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
 bool DBHandler::hasUser(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT tg_id FROM users WHERE tg_id = %ld", tg_id);
+    sprintf(buffer, "SELECT tg_id FROM users WHERE tg_id = %lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -97,7 +98,7 @@ bool DBHandler::hasUser(int64_t tg_id) {
     MYSQL_RES *result = mysql_store_result(con);
 
     //maybe delete it?
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
@@ -124,7 +125,7 @@ bool DBHandler::hasUser(const string &name) {
     }
     MYSQL_RES *result = mysql_store_result(con);
     //maybe delete it?
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
@@ -142,7 +143,7 @@ bool DBHandler::hasUser(const string &name) {
 int DBHandler::getCurMenu(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT CurrentMenu FROM users WHERE tg_id = %ld", tg_id);
+    sprintf(buffer, "SELECT CurrentMenu FROM users WHERE tg_id = %lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -150,7 +151,7 @@ int DBHandler::getCurMenu(int64_t tg_id) {
         return -1;
     }
     MYSQL_RES *result = mysql_store_result(con);
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
@@ -176,7 +177,7 @@ int DBHandler::getCurMenu(int64_t tg_id) {
 int DBHandler::getAccessLevel(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT AccessLevel FROM users WHERE tg_id = %ld", tg_id);
+    sprintf(buffer, "SELECT AccessLevel FROM users WHERE tg_id = %lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -184,7 +185,7 @@ int DBHandler::getAccessLevel(int64_t tg_id) {
         return -1;
     }
     MYSQL_RES *result = mysql_store_result(con);
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
@@ -210,7 +211,7 @@ int DBHandler::getAccessLevel(int64_t tg_id) {
 int DBHandler::getLanguage(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT Language FROM users WHERE tg_id = %ld", tg_id);
+    sprintf(buffer, "SELECT Language FROM users WHERE tg_id = %lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -218,7 +219,7 @@ int DBHandler::getLanguage(int64_t tg_id) {
         return -1;
     }
     MYSQL_RES *result = mysql_store_result(con);
-    if (result == NULL) {
+    if (result == nullptr) {
         error_handle();
         free(buffer);
         m_mutex.unlock();
@@ -245,7 +246,7 @@ int DBHandler::getLanguage(int64_t tg_id) {
 void DBHandler::setCurMenu(int64_t tg_id, int cur_menu) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "UPDATE users SET CurrentMenu = %d WHERE tg_id = %ld", cur_menu, tg_id);
+    sprintf(buffer, "UPDATE users SET CurrentMenu = %d WHERE tg_id = %lld", cur_menu, tg_id);
     if (mysql_query(con, buffer)) {
         free(buffer);
         error_handle();
@@ -260,7 +261,7 @@ void DBHandler::setCurMenu(int64_t tg_id, int cur_menu) {
 void DBHandler::setAccessLevel(int64_t tg_id, int cur_level) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "UPDATE users SET AccessLevel = %d WHERE tg_id = %ld", cur_level, tg_id);
+    sprintf(buffer, "UPDATE users SET AccessLevel = %d WHERE tg_id = %lld", cur_level, tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -274,7 +275,7 @@ void DBHandler::setAccessLevel(int64_t tg_id, int cur_level) {
 void DBHandler::setLanguage(int64_t tg_id, int cur_language) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "UPDATE users SET Language = %d WHERE tg_id = %ld", cur_language, tg_id);
+    sprintf(buffer, "UPDATE users SET Language = %d WHERE tg_id = %lld", cur_language, tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -289,7 +290,7 @@ int DBHandler::addMessage(int64_t tg_id, int32_t message_id, int32_t isBot) {
     m_mutex.lock();
     //INSERT INTO users VALUES (NULL, %ld, '%s', %d, %d, %d)
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "INSERT INTO messages VALUES (NULL, %d, %ld, %d)", message_id, tg_id, isBot);
+    sprintf(buffer, "INSERT INTO messages VALUES (NULL, %d, %lld, %d, NULL)", message_id, tg_id, isBot);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -320,7 +321,7 @@ int DBHandler::deleteMessage(int64_t tg_id, int32_t message_id) {
 int DBHandler::deleteMessageUser(int64_t tg_id, int32_t isBot) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "DELETE FROM messages WHERE user_id=%ld AND isBot=%d", tg_id, isBot);
+    sprintf(buffer, "DELETE FROM messages WHERE user_id=%lld AND isBot=%d", tg_id, isBot);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -336,7 +337,7 @@ int DBHandler::deleteMessageUser(int64_t tg_id, int32_t isBot) {
 int DBHandler::deleteAllMessage(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "DELETE FROM messages WHERE user_id=%ld", tg_id);
+    sprintf(buffer, "DELETE FROM messages WHERE user_id=%lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -352,7 +353,7 @@ int DBHandler::deleteAllMessage(int64_t tg_id) {
 list<int32_t> *DBHandler::getMessages(int64_t tg_id, int32_t isBot) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT id_message FROM messages WHERE user_id =%ld AND isBot=%d", tg_id, isBot);
+    sprintf(buffer, "SELECT id_message FROM messages WHERE user_id =%lld AND isBot=%d", tg_id, isBot);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -389,7 +390,7 @@ list<int32_t> *DBHandler::getMessages(int64_t tg_id, int32_t isBot) {
 list<int32_t> *DBHandler::getAllMessages(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT id_message FROM messages WHERE user_id =%ld", tg_id);
+    sprintf(buffer, "SELECT id_message FROM messages WHERE user_id =%lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -421,6 +422,60 @@ list<int32_t> *DBHandler::getAllMessages(int64_t tg_id) {
     free(buffer);
     m_mutex.unlock();
     return list;
+}
+
+int DBHandler::addMessageWithText(int64_t tg_id, int32_t message_id, int32_t isBot, string text) {
+    m_mutex.lock();
+    //INSERT INTO users VALUES (NULL, %ld, '%s', %d, %d, %d)
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "INSERT INTO messages VALUES (NULL, %d, %lld, %d, \"%s\")", message_id, tg_id, isBot, text.c_str());
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    free(buffer);
+    m_mutex.unlock();
+    return 0;
+}
+
+string DBHandler::getText(int64_t tg_id, int32_t message_id) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT text FROM messages WHERE user_id =%lld AND id_message =%d", tg_id, message_id);
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return {};
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return {};
+    }
+    uint64_t num_fields = mysql_num_rows(result);
+    if (num_fields == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return {};
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    string res{};
+    if (row[0] == NULL)
+        return {};
+    res = row[0];
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
 }
 
 

@@ -47,6 +47,8 @@ public:
 
     int getLanguage(int64_t tg_id);
 
+    string getText(int64_t tg_id, int32_t message_id);
+
     void setCurMenu(int64_t tg_id, int cur_menu);
 
     void setAccessLevel(int64_t tg_id, int cur_level);
@@ -54,6 +56,8 @@ public:
     void setLanguage(int64_t tg_id, int cur_language);
 
     int addMessage(int64_t tg_id, int32_t message_id, int32_t isBot);
+
+    int addMessageWithText(int64_t tg_id, int32_t message_id, int32_t isBot, string text);
 
     int deleteMessage(int64_t tg_id, int32_t message_id);
 

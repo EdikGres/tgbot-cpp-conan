@@ -24,7 +24,7 @@ using namespace TgBot;
 void finish_with_error(MYSQL *con) {
     fprintf(stderr, "%s\n", mysql_error(con));
     mysql_close(con);
-    exit(1);
+    exit(2);
 }
 
 int main() {
@@ -54,6 +54,7 @@ int main() {
     CallbackQueryRecorder recorder1(bot, db, sb);
 
     MessageRecorder recorder2(bot, db, sb);
+
 
     signal(SIGINT, [](int s) {
         printf("SIGINT got\n");

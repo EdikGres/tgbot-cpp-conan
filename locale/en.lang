@@ -6,13 +6,16 @@
 "Cash-Flow" : "Cash Flow";
 
 #inline-start
+"select-language" : "Выберите язык/Select language:";
 "UK" : "🇬🇧 English";
 "RU" : "🇷🇺 Русский";
-"start-successful" : "Language set successfully 🇬🇧";
+"language-set-successful" : "Language set successfully 🇬🇧";
+"clear-language" : "❌Скрыть/Hide";
 
 #after start menu
 "text-GMP" : "Napolnenie GMP bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
 "text-GMP-beginners" : "Fillings for beginners";
+"GMP-learning" : "Learning";
 "training for beginners" : "Training for beginners";
 "training for teachers" : "Training for teachers";
 "training for leaders" : "Training for leaders";

@@ -17,11 +17,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
         thread t1([&bot, &db, &sb, query, this]() {
             unordered_map<string, string> *text = my::get_lang(db, sb, query);
             int cur_menu = db.getCurMenu(query->from->id);
-            //language
+            //language UK
             if (StringTools::startsWith(query->data, text->at("UK"))) {
                 InlineKeyboardMarkup::Ptr languageInlineKeyboard(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("UK"), text->at("RU")}
+                                                                {text->at("UK"), text->at("RU")},
+                                                                {text->at("clear-language")}
                                                         }, languageInlineKeyboard);
                 db.setLanguage(query->from->id, 1);
                 text = my::get_lang(db, sb, query);
@@ -30,7 +31,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     return;
                 int32_t msg = l_msg->back();
                 try {
-                    bot.getApi().editMessageText(text->at("start-successful"), query->from->id,
+                    bot.getApi().editMessageText(text->at("language-set-successful"), query->from->id,
                                                  msg,
                                                  "", "", false, languageInlineKeyboard);
                 }
@@ -40,11 +41,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 delete (l_msg);
                 return;
             }
-            //language
+            //language RU
             if (StringTools::startsWith(query->data, text->at("RU"))) {
                 InlineKeyboardMarkup::Ptr languageInlineKeyboard(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("UK"), text->at("RU")}
+                                                                {text->at("UK"), text->at("RU")},
+                                                                {text->at("clear-language")}
                                                         }, languageInlineKeyboard);
                 db.setLanguage(query->from->id, 0);
                 text = my::get_lang(db, sb, query);
@@ -53,7 +55,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     return;
                 int32_t msg = l_msg->back();
                 try {
-                    bot.getApi().editMessageText(text->at("start-successful"), query->from->id,
+                    bot.getApi().editMessageText(text->at("language-set-successful"), query->from->id,
                                                  msg,
                                                  "", "", false, languageInlineKeyboard);
                 }
@@ -63,14 +65,25 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 delete (l_msg);
                 return;
             }
+            //language-hide
+            if(StringTools::startsWith(query->data, text->at("clear-language"))){
+                try {
+                    db.deleteMessage(query->from->id, query->message->messageId);
+                    bot.getApi().deleteMessage(query->from->id, query->message->messageId);
+                }
+                catch (TgException ex) {
+                    cerr << ex.what() << endl;
+                }
+                return;
+            }
+
+
+
             //GMP MENU = 1
             if (StringTools::startsWith(query->data, text->at("GMP"))) {
                 InlineKeyboardMarkup::Ptr inlineGMP(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("training for beginners"), text->at(
-                                                                        "training for teachers")},
-                                                                {text->at("training for leaders"),   text->at(
-                                                                        "training for TOP-leaders")},
+                                                                {text->at("training for beginners")},
                                                                 {text->at("materials"),              text->at(
                                                                         "testing")},
                                                                 {text->at("team rules"),             text->at(
@@ -125,10 +138,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 db.setCurMenu(query->from->id, 1);
                 InlineKeyboardMarkup::Ptr inlineGMP(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("training for beginners"), text->at(
-                                                                        "training for teachers")},
-                                                                {text->at("training for leaders"),   text->at(
-                                                                        "training for TOP-leaders")},
+                                                                {text->at("training for beginners")},
                                                                 {text->at("materials"),              text->at(
                                                                         "testing")},
                                                                 {text->at("team rules"),             text->at(

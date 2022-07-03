@@ -25,10 +25,6 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             db.setCurMenu(message->from->id, 0);
             unordered_map<string, string> *text = my::get_lang(db, sb, message);
             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-//            KeyboardGenerator::createKeyboard({
-//                                                      {text->at("Cash-Flow"), text->at(
-//                                                              "GMP")},
-//                                              }, mainKeyboard);
             KeyboardGenerator::createInlineKeyboard({
                                                             {text->at("Cash-Flow"), text->at("GMP")}
                                                     }, keyb);
@@ -57,43 +53,38 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
         t1.detach();
     });
 
+    //language-----------------------------------
+    commands.emplace_back("language");
+    bot.getEvents().onCommand("language", [&bot, &db, &sb, this](const Message::Ptr &message) {
+        thread t1([&bot, &db, &sb, message, this]() {
+            unordered_map<string, string> *text = my::get_lang(db, sb, message);
+            try {
+                bot.getApi().deleteMessage(message->from->id, message->messageId);
+            }
+            catch (TgException ex) {
+                cerr << ex.what() << endl;
+            }
+            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+            KeyboardGenerator::createInlineKeyboard({{text->at("UK"), text->at("RU")}, {text->at("clear-language")}}, keyb);
+            Message::Ptr msg = bot.getApi().sendMessage(message->from->id, text->at("select-language"), false, 0, keyb);
+            db.addMessageWithText(message->from->id, msg->messageId, 1, text->at("select-language"));
+        });
+        t1.detach();
+    });
+
 
     //test---------------------------------------
     commands.emplace_back("test");
     bot.getEvents().onCommand("test", [&bot, &db, &sb, this](const Message::Ptr &message) {
         thread t1([&bot, &db, &sb, message, this]() {
-            const int lang = db.getLanguage(message->from->id);
-            unordered_map<string, string> *text;
-            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-            switch (lang) {
-                case 0:
-                    text = sb.getRu();
-                    break;
-                case 1:
-                    text = sb.getEn();
-                    break;
-                default:
-                    text = sb.getRu();
-                    break;
+            try {
+                bot.getApi().deleteMessage(message->from->id, message->messageId);
             }
-            KeyboardGenerator::createInlineKeyboard({
-                                                            {text->at("UK"), text->at("RU")}
-                                                    }, keyb);
-            bot.getApi().sendMessage(message->chat->id,
-                                     "/start for one column keyboard\n/layout for a more complex keyboard", false,
-                                     0,
-                                     keyb);
+            catch (TgException ex) {
+                cerr << ex.what() << endl;
+            }
         });
         t1.detach();
-    });
-
-    //my_id
-    commands.emplace_back("my_id");
-    bot.getEvents().onCommand("my_id", [&bot, this](const Message::Ptr &message) {
-        string text = "ID:";
-        text += std::to_string(message->from->id);
-        text += "\nchat_id:" + to_string(message->chat->id);
-        bot.getApi().sendMessage(message->chat->id, text);
     });
 
     //clear_all

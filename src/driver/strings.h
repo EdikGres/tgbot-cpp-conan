@@ -14,5 +14,10 @@ extern const string GMP_menu_img;
 extern const string ru_locale;
 extern const string en_locale;
 extern const string GMP_beginners_menu;
+enum state{
+    START_ST = 0,
+    CASHFLOW_ST = 1,
+
+};
 
 #endif //KOSTYA_BOT_STRINGS_H
