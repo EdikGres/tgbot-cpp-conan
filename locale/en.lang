@@ -1,6 +1,10 @@
 #/start message
 "start-message" : "Welcome to (name) select training";
 
+#errors
+"partition-unavailable" : "The section is not yet available to you, insufficient access level!";
+"in-develop" : "In develop...";
+
 #start-menu
 "GMP" : "GMP";
 "Cash-Flow" : "Cash Flow";
@@ -12,7 +16,7 @@
 "language-set-successful" : "Language set successfully 🇬🇧";
 "clear-language" : "❌Скрыть/Hide";
 
-#after start menu
+#after start menu GMP
 "text-GMP" : "Napolnenie GMP bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
 "text-GMP-beginners" : "Fillings for beginners";
 "GMP-learning" : "Learning";
@@ -26,6 +30,22 @@
 "events and training" : "Events and training";
 "mentors and focus groups" : "Mentors and focus groups";
 
+#after start menu CashFlow
+"text-CashFlow" : "Napolnenie CashFlow bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+"text-CashFlow-learning" : "Content for the section Education Cashflow";
+"text-CashFlow-beginners" : "Fillings for beginners";
+"CashFlow-learning" : "Learning";
+"training for beginners" : "Training for beginners";
+"training for teachers" : "Training for teachers";
+"training for leaders" : "Training for leaders";
+"training for TOP-leaders" : "Training for TOP-leaders";
+"materials" : "Materials";
+"testing" : "Testing";
+"team rules" : "Team rules";
+"events and training" : "Events and training";
+"mentors and focus groups" : "Mentors and focus groups";
+"back-cashflow" : "Come back";
+
 #for beginners
 "start learning" : "Start learning";
 "back" : "Back";
@@ -38,9 +58,22 @@
 
 #for teachers
 "checklist for mentors" : "Checklist for mentors";
+"text-menu-teachers" : "Content for training for teachers";
 "text-teachers-1" : "text1";
 "text-teachers-2" : "text2";
 "text-teachers-3" : "text3";
+
+#for leaders
+"text-menu-leaders" : "Content for training for TOP leaders";
+"text-leaders-1" : "text1";
+"text-leaders-2" : "text2";
+"text-leaders-3" : "text3";
+
+#for TOP leaders
+"text-menu-top-leaders" : "Content for training for TOP leaders";
+"text-top-leaders-1" : "text1";
+"text-top-leaders-2" : "text2";
+"text-top-leaders-3" : "text3";
 
 ##materials
 "PDF presentation (pdf file)" : "";

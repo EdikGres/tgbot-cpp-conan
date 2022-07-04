@@ -16,8 +16,8 @@ MessageRecorder::MessageRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
                 try {
                     bot.getApi().deleteMessage(message->from->id, message->messageId);
                 }
-                catch (TgException ex) {
-                    cerr << ex.what() << endl;
+                catch (TgException& ex) {
+                    cerr << ex.what()  << "\n\tline: " << __LINE__ << endl;
                 }
                 return;
         });

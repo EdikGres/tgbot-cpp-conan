@@ -43,17 +43,25 @@ public:
 
     int getCurMenu(int64_t tg_id);
 
+    int getCurText(int64_t tg_id);
+
     int getAccessLevel(int64_t tg_id);
 
     int getLanguage(int64_t tg_id);
+
+    int getIsSpammer(int64_t tg_id);
 
     string getText(int64_t tg_id, int32_t message_id);
 
     void setCurMenu(int64_t tg_id, int cur_menu);
 
+    void setCurText(int64_t tg_id, int cur_text);
+
     void setAccessLevel(int64_t tg_id, int cur_level);
 
     void setLanguage(int64_t tg_id, int cur_language);
+
+    void setIsSpammer(int64_t tg_id, int isSpammer);
 
     int addMessage(int64_t tg_id, int32_t message_id, int32_t isBot);
 

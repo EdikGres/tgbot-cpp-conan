@@ -1,7 +1,9 @@
 #/start message
 "start-message" : "<b>Добро пожаловать</b> в (Название) выберите обучение";
 
-##"start-message" : "<b>bold</b>, <strong>bold</strong>";
+#errors
+"partition-unavailable" : "Раздел пока что вам недоступен, недостаточный уровень доступа!";
+"in-develop" : "В разработке...";
 
 #start-menu
 "GMP" : "GMP";
@@ -14,7 +16,7 @@
 "language-set-successful" : "Язык успешно установлен 🇷🇺 ";
 "clear-language" : "❌Скрыть/Hide";
 
-#after start menu
+#after start menu GMP
 "text-GMP" : "Наполнение для GMP меню бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла бла";
 "text-GMP-beginners" : "Наполнения для новичков";
 "GMP-learning" : "Обучение";
@@ -28,6 +30,22 @@
 "events and training" : "Мероприятия и обучения";
 "mentors and focus groups" : "Наставники и фокус-группы";
 
+#after start menu CashFlow
+"text-CashFlow" : "Napolnenie CashFlow bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla";
+"text-CashFlow-learning" : "Наполнение для раздела обучение cashflow";
+"text-CashFlow-beginners" : "Наполнения для новичков";
+"CashFlow-learning" : "Обучение";
+"training for beginners" : "Обучение для новичков";
+"training for teachers" : "Обучение для наставников";
+"training for leaders" : "Обучение для лидеров";
+"training for TOP-leaders" : "Обучение для ТОП лидеров";
+"materials" : "Материалы";
+"testing" : "Тестирование";
+"team rules" : "Правила команды";
+"events and training" : "Мероприятия и обучения";
+"mentors and focus groups" : "Наставники и фокус-группы";
+"back-cashflow" : "Вернуться назад";
+
 #for beginners
 "start learning" : "Начать обучение";
 "back" : "Назад";
@@ -40,9 +58,22 @@
 
 #for teachers
 "checklist for mentors" : "Чек-лист для наставников";
+"text-menu-teachers" : "Наполнение для Обучения для наставников";
 "text-teachers-1" : "текст1";
 "text-teachers-2" : "текст2";
 "text-teachers-3" : "текст3";
+
+#for leaders
+"text-menu-leaders" : "Наполнение для Обучения для Лидеров";
+"text-leaders-1" : "текст1";
+"text-leaders-2" : "текст2";
+"text-leaders-3" : "текст3";
+
+#for TOP leaders
+"text-menu-top-leaders" : "Наполнение для Обучения для ТОП лидеров";
+"text-top-leaders-1" : "текст1";
+"text-top-leaders-2" : "текст2";
+"text-top-leaders-3" : "текст3";
 
 ##materials
 "PDF presentation (pdf file)" : "";

@@ -3,11 +3,17 @@
 //
 #include "strings.h"
 
-//#define DEBUG
+#define DEBUG
 
-const string start_img = "https://downloader.disk.yandex.ru/preview/b9633bbf09e1dbf8cef1481d625ea0148bd94c17f3919340e798d72b31fa7394/62bcf71a/VWha0-jl2zWGHXnO5AQOY4Wtn9s2DedHMoTiFOxUfiVufnWnscXRb76pz0Y5PiA-2UH7cFnaS4YLwXDWNzPLcg%3D%3D?uid=0&filename=cat-start.jpeg&disposition=inline&hash=&limit=0&content_type=image%2Fjpeg&owner_uid=0&tknv=v2&size=2048x2048";
-const string GMP_menu_img = "https://i.ibb.co/2NpKYJJ/GMP.jpg";
-const string GMP_beginners_menu = "https://i.ibb.co/gvRBn2n/30258560066269057-e9d4-640x.jpg";
+const string start_gif = "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/5eeea355389655.59822ff824b72.gif";
+const string CashFlow_menu_gif = "https://i.gifer.com/4MO.gif";
+const string CashFlow_learning_menu_gif = "https://i.gifer.com/Be.gif";
+const string CashFlow_learning_beginners_menu_gif = "https://i.gifer.com/AnA.gif";
+const string CashFlow_learning_teachers_menu_gif = "https://i.gifer.com/ZUs.gif";
+const string CashFlow_learning_leaders_menu_gif = "https://i.gifer.com/4Ez.gif";
+const string CashFlow_learning_TOPleaders_menu_gif = "https://i.gifer.com/7cXx.gif";
+const string no_access = "https://i.gifer.com/7HAU.gif";
+
 #ifdef DEBUG
 const string ru_locale = "../locale/ru.lang";
 const string en_locale = "../locale/en.lang";

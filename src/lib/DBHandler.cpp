@@ -69,7 +69,7 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
         return 3;
     }
     if (mysql_num_rows(result) == 0) {
-        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, %d, %d)", tg_id, name.c_str(), cur_menu,
+        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, 0, %d, %d, 0)", tg_id, name.c_str(), cur_menu,
                 access_level, language);
         if (mysql_query(con, buffer)) {
             error_handle();
@@ -469,13 +469,122 @@ string DBHandler::getText(int64_t tg_id, int32_t message_id) {
     MYSQL_ROW row = mysql_fetch_row(result);
 
     string res{};
-    if (row[0] == NULL)
+    if (row[0] == NULL) {
+        m_mutex.unlock();
         return {};
+    }
     res = row[0];
     mysql_free_result(result);
     free(buffer);
     m_mutex.unlock();
     return res;
+}
+
+void DBHandler::setIsSpammer(int64_t tg_id, int isSpammer) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "UPDATE users SET isSpammer = %d WHERE tg_id = %lld", isSpammer, tg_id);
+    if (mysql_query(con, buffer)) {
+        free(buffer);
+        error_handle();
+        m_mutex.unlock();
+        return;
+    }
+
+    free(buffer);
+    m_mutex.unlock();
+}
+
+int DBHandler::getIsSpammer(int64_t tg_id) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT isSpammer FROM users WHERE tg_id =%lld", tg_id);
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_RES *result = mysql_store_result(con);
+
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    uint64_t num_fields = mysql_num_rows(result);
+    if (num_fields == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    if (row[0] == NULL) {
+        m_mutex.unlock();
+        return -1;
+    }
+
+    int ret = atoi(row[0]);
+
+
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return ret;
+}
+
+int DBHandler::getCurText(int64_t tg_id) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT CurrentText FROM users WHERE tg_id = %lld", tg_id);
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    if (mysql_num_rows(result) == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    int res = atoi(row[0]); //CurrentMenu(mysql field)
+
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
+}
+
+void DBHandler::setCurText(int64_t tg_id, int cur_text) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "UPDATE users SET CurrentText = %d WHERE tg_id = %lld", cur_text, tg_id);
+    if (mysql_query(con, buffer)) {
+        free(buffer);
+        error_handle();
+        m_mutex.unlock();
+        return;
+    }
+
+    free(buffer);
+    m_mutex.unlock();
 }
 
 
