@@ -261,7 +261,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             }
 
             //CashFlow-learning-forBeginners MENU=8
-            if(cur_menu == CASHFLOW_BEGINNERS_LEARNING && StringTools::startsWith(query->data, text->at(""))){
+            if(cur_menu == CASHFLOW_BEGINNERS_LEARNING && StringTools::startsWith(query->data, text->at("start learning"))){
 
                 return;
             }
