@@ -9,7 +9,7 @@
 #include <thread>
 #include <limits>
 #include "../driver/StringBuilder.h"
-#include "DBHandler.h"
+#include "../driver/DBHandler.h"
 
 namespace my{
     unordered_map<string, string>* get_lang(DBHandler &db, StringBuilder &sb, const TgBot::Message::Ptr &message);

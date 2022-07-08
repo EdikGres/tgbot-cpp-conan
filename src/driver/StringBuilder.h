@@ -6,12 +6,14 @@
 #define KOSTYA_BOT_STRINGBUILDER_H
 #include "unordered_map"
 #include "StringParser.h"
-
+#include "DBHandler.h"
 using namespace std;
 
 class StringBuilder {
 public:
     StringBuilder(string files[]);
+
+    StringBuilder(string files[], DBHandler &db);
 
     virtual ~StringBuilder();
 

@@ -587,6 +587,49 @@ void DBHandler::setCurText(int64_t tg_id, int cur_text) {
     m_mutex.unlock();
 }
 
+unordered_map<string, string> *DBHandler::getStrings(string table_name) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT * FROM %s", table_name.c_str());
+    if (mysql_query(con, buffer)) {
+        free(buffer);
+        error_handle();
+        m_mutex.unlock();
+        return nullptr;
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return nullptr;
+    }
+    uint64_t rows = mysql_num_rows(result);
+    if (rows == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return nullptr;
+    }
+    auto *ret = new unordered_map<string, string>;
+    MYSQL_ROW row;
+    string key, value;
+    for (int i = 0; i < rows; ++i) {
+        row = mysql_fetch_row(result);
+        key = row[0];
+        if (row[1] == nullptr) {
+            value = "NULL";
+        } else {
+            value = row[1];
+        }
+        ret->insert({key, value});
+    }
+
+
+    m_mutex.unlock();
+    return ret;
+}
+
 
 
 

@@ -13,6 +13,8 @@ extern const string start_gif;
 extern const string CashFlow_menu_gif;
 extern const string ru_locale;
 extern const string en_locale;
+extern const string ru_db;
+extern const string en_db;
 extern const string CashFlow_learning_menu_gif;
 extern const string CashFlow_learning_beginners_menu_gif;
 extern const string CashFlow_learning_teachers_menu_gif;

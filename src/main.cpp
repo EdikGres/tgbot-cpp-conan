@@ -4,7 +4,7 @@
 #include <tgbot/tgbot.h>
 #include "lib/CommandRecorder.h"
 #include <mysql.h>
-#include "lib/DBHandler.h"
+#include "driver/DBHandler.h"
 #include "driver/StringParser.h"
 #include "driver/StringBuilder.h"
 #include "lib/CallbackQueryRecorder.h"
@@ -38,14 +38,15 @@ int main() {
     printf("Token: %s\n", token.c_str());
 
 
-    //change for deploy
-    string files[] = {ru_locale, en_locale};
-    StringBuilder sb(files);
+
 
 
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
 
+    //change for deploy
+    string files[] = {ru_db, en_db};
+    StringBuilder sb(files, db);
 
     Bot bot(token);
 

@@ -8,7 +8,7 @@
 
 #include <tgbot/Bot.h>
 #include "../driver/StringBuilder.h"
-#include "DBHandler.h"
+#include "../driver/DBHandler.h"
 
 using namespace std;
 using namespace TgBot;

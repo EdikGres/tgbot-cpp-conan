@@ -10,6 +10,7 @@
 #include <string>
 #include <mutex>
 #include <list>
+#include <unordered_map>
 
 using namespace std;
 
@@ -76,6 +77,8 @@ public:
     list<int32_t> *getMessages(int64_t tg_id, int32_t isBot);
 
     list<int32_t> *getAllMessages(int64_t tg_id);
+
+    unordered_map<string,string> *getStrings(string table_name);
 
 };
 
