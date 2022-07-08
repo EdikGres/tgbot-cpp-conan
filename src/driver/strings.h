@@ -9,18 +9,27 @@
 
 using namespace std;
 
-extern const string start_gif;
-extern const string CashFlow_menu_gif;
 extern const string ru_locale;
 extern const string en_locale;
 extern const string ru_db;
 extern const string en_db;
+
+extern const string start_gif;
+extern const string CashFlow_menu_gif;
 extern const string CashFlow_learning_menu_gif;
 extern const string CashFlow_learning_beginners_menu_gif;
 extern const string CashFlow_learning_teachers_menu_gif;
 extern const string CashFlow_learning_leaders_menu_gif;
 extern const string CashFlow_learning_TOPleaders_menu_gif;
-extern const string no_access;
+
+extern const string no_access_gif;
+
+extern const string GMP_menu_gif;
+extern const string GMP_learning_menu_gif;
+extern const string GMP_learning_beginners_menu_gif;
+extern const string GMP_learning_teachers_menu_gif;
+extern const string GMP_learning_leaders_menu_gif;
+extern const string GMP_learning_TOPleaders_menu_gif;
 
 
 enum state{
@@ -33,8 +42,6 @@ enum state{
     CASHFLOW_TOPLEADERS_LERNING = 6,
     CASHFLOW_MAIN_MATERIALS = 7,
     CASHFLOW_BEGINNERS_LEARNING_START = 8,
-
-
 
 };
 

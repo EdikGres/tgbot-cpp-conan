@@ -36,7 +36,7 @@ public:
 
     virtual ~DBHandler();
 
-    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level, int language);
+    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow, int language);
 
     bool hasUser(int64_t tg_id);
 
@@ -46,7 +46,9 @@ public:
 
     int getCurText(int64_t tg_id);
 
-    int getAccessLevel(int64_t tg_id);
+    int getAccessLevelGMP(int64_t tg_id);
+
+    int getAccessLevelCashFlow(int64_t tg_id);
 
     int getLanguage(int64_t tg_id);
 
@@ -58,7 +60,9 @@ public:
 
     void setCurText(int64_t tg_id, int cur_text);
 
-    void setAccessLevel(int64_t tg_id, int cur_level);
+    void setAccessLevelGMP(int64_t tg_id, int cur_level);
+
+    void setAccessLevelCashFlow(int64_t tg_id, int cur_level);
 
     void setLanguage(int64_t tg_id, int cur_language);
 
@@ -79,6 +83,7 @@ public:
     list<int32_t> *getAllMessages(int64_t tg_id);
 
     unordered_map<string,string> *getStrings(string table_name);
+
 
 };
 

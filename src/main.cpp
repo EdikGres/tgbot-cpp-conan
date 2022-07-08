@@ -11,11 +11,10 @@
 #include "lib/MessageRecorder.h"
 #include "driver/strings.h"
 //TODO: СДЕЛАТЬ ОГРАНИЧИТЕЛЬ ДО 10 СООБЩЕНИЙ В СЕКУНДУ ДЛЯ 1 ЧЕЛОВЕКА!
-//TODO: Сделать многопоточность для mysql
 //TODO: Добавить таймстамп к сообщению
 //TODO: Сделать mysql запрос на получение последнего ид сообщения ( можно запросом WHERE max ( но не фактЮ вдруг коллизия ид наступит ))
 //TODO: Сделать защиту от спамеров ( мб бан по полю isSpammer ) (уточнить)
-//TODO: Сделать мультинациональные меню. Чтобы искало коллбек не по значению, а по ключу мапа. Либо сделать || с иноязычной версией, но тогда расширяемости не будет.
+//TODO: !!!!!!!Сделать пул соединений для mysql && сделать пул потоков для обработки сообщений!!!!!!!
 
 using namespace std;
 using namespace TgBot;
@@ -43,6 +42,8 @@ int main() {
 
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
+
+    //auto* callbacks = db.getCallbacks();
 
     //change for deploy
     string files[] = {ru_db, en_db};

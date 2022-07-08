@@ -48,7 +48,7 @@ void DBHandler::error_handle() {
     //exit(1);
 }
 
-int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int access_level, int language) {
+int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow, int language) {
     if (name.length() > 120)
         return 1;
     m_mutex.lock();
@@ -69,8 +69,8 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
         return 3;
     }
     if (mysql_num_rows(result) == 0) {
-        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, 0, %d, %d, 0)", tg_id, name.c_str(), cur_menu,
-                access_level, language);
+        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, 0, %d, %d, %d, 0)", tg_id, name.c_str(), cur_menu,
+                access_level_GMP, access_level_CashFlow, language);
         if (mysql_query(con, buffer)) {
             error_handle();
             free(buffer);
@@ -174,10 +174,44 @@ int DBHandler::getCurMenu(int64_t tg_id) {
     return res;
 }
 
-int DBHandler::getAccessLevel(int64_t tg_id) {
+int DBHandler::getAccessLevelGMP(int64_t tg_id) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT AccessLevel FROM users WHERE tg_id = %lld", tg_id);
+    sprintf(buffer, "SELECT AccessLevelGMP FROM users WHERE tg_id = %lld", tg_id);
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    if (mysql_num_rows(result) == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    int res = atoi(row[0]); //CurrentMenu(mysql field)
+
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
+}
+
+int DBHandler::getAccessLevelCashFlow(int64_t tg_id) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT AccessLevelCashFlow FROM users WHERE tg_id = %lld", tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -258,10 +292,24 @@ void DBHandler::setCurMenu(int64_t tg_id, int cur_menu) {
     m_mutex.unlock();
 }
 
-void DBHandler::setAccessLevel(int64_t tg_id, int cur_level) {
+void DBHandler::setAccessLevelGMP(int64_t tg_id, int cur_level) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "UPDATE users SET AccessLevel = %d WHERE tg_id = %lld", cur_level, tg_id);
+    sprintf(buffer, "UPDATE users SET AccessLevelGMP = %d WHERE tg_id = %lld", cur_level, tg_id);
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return;
+    }
+    free(buffer);
+    m_mutex.unlock();
+}
+
+void DBHandler::setAccessLevelCashFlow(int64_t tg_id, int cur_level) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "UPDATE users SET AccessLevelCashFlow = %d WHERE tg_id = %lld", cur_level, tg_id);
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -624,8 +672,8 @@ unordered_map<string, string> *DBHandler::getStrings(string table_name) {
         }
         ret->insert({key, value});
     }
-
-
+    mysql_free_result(result);
+    free(buffer);
     m_mutex.unlock();
     return ret;
 }

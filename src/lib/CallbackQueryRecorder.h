@@ -7,6 +7,7 @@
 
 
 #include <tgbot/Bot.h>
+#include <unordered_map>
 #include "../driver/StringBuilder.h"
 #include "../driver/DBHandler.h"
 
@@ -20,6 +21,7 @@ public:
 private:
     DBHandler &db;
     StringBuilder &sb;
+
 };
 
 

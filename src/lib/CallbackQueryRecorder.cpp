@@ -16,9 +16,13 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
     bot.getEvents().onCallbackQuery([&bot, &db, &sb, this](CallbackQuery::Ptr query) {
         thread t1([&bot, &db, &sb, query, this]() {
+            //DEBUG
+            cout << "query: " << query->data << endl;
             unordered_map<string, string> *text = my::get_lang(db, sb, query);
             int cur_menu = db.getCurMenu(query->from->id);
-            int cur_access = db.getAccessLevel(query->from->id);
+            //optimize in 1 !!!
+            int cur_access_CashFlow = db.getAccessLevelCashFlow(query->from->id);
+            int cur_access_GMP = db.getAccessLevelGMP(query->from->id);
 //----------------------------------------------------------------------------------------------------------------------
 //                                            LANGUAGE_MODUL
 //----------------------------------------------------------------------------------------------------------------------
@@ -76,15 +80,20 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 //                                            CASHFLOW_MODULE
 //----------------------------------------------------------------------------------------------------------------------
             //CashFlow MENU=1
-            if ((StringTools::startsWith(query->data, text->at("Cash-Flow")) ||
-                 StringTools::startsWith(query->data, text->at("back-cashflow"))) &&
-                (cur_menu == START_ST || cur_menu == CASHFLOW_LEARNING_ST)) {
-                db.setCurMenu(query->from->id, CASHFLOW_MAIN_ST);
+            if (query->data == "cashflow") {
+
+
+
+                //db.setCurMenu(query->from->id, CASHFLOW_MAIN_ST);
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({{text->at("CashFlow-learning")},
                                                          {text->at("materials"),  text->at("testing")},
                                                          {text->at("team rules"), text->at("events and training")},
                                                          {text->at("mentors and focus groups")}
+                                                        }, {{"cashflow-learning"},
+                                                            {"cashflow-materials",  "cashflow-testing"},
+                                                            {"cashflow-team-rules", "cashflow-events-and-training"},
+                                                            {"cashflow-mentors-and-focus-groups"}
                                                         }, keyb);
 
                 try {
@@ -102,17 +111,19 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             }
 
             //CashFlow-Learning MENU=2
-            if ((StringTools::startsWith(query->data, text->at("CashFlow-learning")) ||
-                 StringTools::startsWith(query->data, text->at("back-menu"))) &&
-                (cur_menu == CASHFLOW_MAIN_ST ||
-                 cur_menu >= CASHFLOW_BEGINNERS_LEARNING && cur_menu <= CASHFLOW_TOPLEADERS_LERNING)) {
-                db.setCurMenu(query->from->id, CASHFLOW_LEARNING_ST);
+            if (StringTools::startsWith(query->data, "cashflow-learning")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_LEARNING_ST);
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({{text->at("training for beginners")},
                                                          {text->at("training for teachers")},
                                                          {text->at("training for leaders")},
                                                          {text->at("training for TOP-leaders")},
-                                                         {text->at("back-cashflow")}
+                                                         {text->at("back-back")}
+                                                        }, {{"cashflow-training-for-beginners"},
+                                                            {"cashflow-training-for-teachers"},
+                                                            {"cashflow-training-for-leaders"},
+                                                            {"cashflow-training-for-TOP-leaders"},
+                                                            {"cashflow"}
                                                         }, keyb);
 
                 try {
@@ -128,12 +139,13 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 return;
             }
             //CashFlow-Learning-forBeginners MENU=3
-            if (StringTools::startsWith(query->data, text->at("training for beginners")) &&
-                cur_menu == CASHFLOW_LEARNING_ST) {
-                db.setCurMenu(query->from->id, CASHFLOW_BEGINNERS_LEARNING);
+            if (StringTools::startsWith(query->data, "cashflow-training-for-beginners")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_BEGINNERS_LEARNING);
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({{text->at("start learning"), text->at("back-menu")},
                                                          {text->at("materials")}
+                                                        }, {{"cashflow-beginners-start-learning", "cashflow-learning"},
+                                                            {"cashflow-beginner-materials"}
                                                         }, keyb);
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
@@ -147,16 +159,15 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 return;
             }
             //CashFlow-Learning-forTeachers MENU=3
-            if (StringTools::startsWith(query->data, text->at("training for teachers")) &&
-                cur_menu == CASHFLOW_LEARNING_ST) {
-                db.setCurMenu(query->from->id, CASHFLOW_TEACHERS_LEARNING);
-                if (cur_access < 1) {
+            if (StringTools::startsWith(query->data, "cashflow-training-for-teachers")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_TEACHERS_LEARNING);
+                if (cur_access_CashFlow < 1) {
                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}
-                                                            }, keyb);
+                                                            }, {{"cashflow-learning"}}, keyb);
                     try {
                         InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                        media->media = no_access;
+                        media->media = no_access_gif;
                         media->caption = text->at("partition-unavailable");
                         bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
                     }
@@ -169,6 +180,9 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 KeyboardGenerator::createInlineKeyboard({{text->at("start learning"), text->at("back-menu")},
                                                          {text->at("checklist for mentors")},
                                                          {text->at("materials")}
+                                                        }, {{"cashflow-teachers-start-learning", "cashflow-learning"},
+                                                            {"cashflow-teachers-checklist-for-mentors"},
+                                                            {"cashflow-teachers-materials"}
                                                         }, keyb);
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
@@ -183,16 +197,15 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 return;
             }
             //CashFlow-Learning-forLeaders MENU=3
-            if (StringTools::startsWith(query->data, text->at("training for leaders")) &&
-                cur_menu == CASHFLOW_LEARNING_ST) {
-                db.setCurMenu(query->from->id, CASHFLOW_LEADERS_LEARNING);
-                if (cur_access < 2) {
+            if (StringTools::startsWith(query->data, "cashflow-training-for-leaders")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_LEADERS_LEARNING);
+                if (cur_access_CashFlow < 2) {
                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}
-                                                            }, keyb);
+                                                            }, {{"cashflow-learning"}}, keyb);
                     try {
                         InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                        media->media = no_access;
+                        media->media = no_access_gif;
                         media->caption = text->at("partition-unavailable");
                         bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
                     }
@@ -204,6 +217,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({{text->at("start learning"), text->at("back-menu")},
                                                          {text->at("materials")}
+                                                        }, {{"cashflow-leaders-start-learning", "cashflow-learning"},
+                                                            {"cashflow-leaders-materials"}
                                                         }, keyb);
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
@@ -218,16 +233,15 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 return;
             }
             //CashFlow-Learning-forTOPLeaders MENU=3
-            if (StringTools::startsWith(query->data, text->at("training for TOP-leaders")) &&
-                cur_menu == CASHFLOW_LEARNING_ST) {
-                db.setCurMenu(query->from->id, CASHFLOW_TOPLEADERS_LERNING);
-                if (cur_access < 3) {
+            if (StringTools::startsWith(query->data, "cashflow-training-for-TOP-leaders")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_TOPLEADERS_LERNING);
+                if (cur_access_CashFlow < 3) {
                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}
-                                                            }, keyb);
+                                                            }, {{"cashflow-learning"}}, keyb);
                     try {
                         InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                        media->media = no_access;
+                        media->media = no_access_gif;
                         media->caption = text->at("partition-unavailable");
                         bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
                     }
@@ -239,6 +253,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                 KeyboardGenerator::createInlineKeyboard({{text->at("start learning"), text->at("back-menu")},
                                                          {text->at("materials")}
+                                                        }, {{"cashflow-TOP-leaders-start-learning", "cashflow-learning"},
+                                                            {"cashflow-TOP-leaders-materials"}
                                                         }, keyb);
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
@@ -254,15 +270,75 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             }
 
             //CashFlow-main-Materials
-            if(cur_menu == CASHFLOW_MAIN_ST && StringTools::startsWith(query->data, text->at("materials"))){
-                
+            if (StringTools::startsWith(query->data, "materials")) {
+
 
                 return;
             }
 
             //CashFlow-learning-forBeginners MENU=8
-            if(cur_menu == CASHFLOW_BEGINNERS_LEARNING && StringTools::startsWith(query->data, text->at("start learning"))){
+            if (StringTools::startsWith(query->data, "start-learning")) {
 
+
+                return;
+            }
+
+
+//----------------------------------------------------------------------------------------------------------------------
+//                                            CASHFLOW_MODULE
+//----------------------------------------------------------------------------------------------------------------------
+            //GMP main menu
+            if(query->data == "GMP"){
+                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                KeyboardGenerator::createInlineKeyboard({{text->at("GMP-learning")},
+                                                         {text->at("materials"),  text->at("testing")},
+                                                         {text->at("team rules"), text->at("events and training")},
+                                                         {text->at("mentors and focus groups")}
+                                                        }, {{"GMP-learning"},
+                                                            {"GMP-materials",  "GMP-testing"},
+                                                            {"GMP-team-rules", "GMP-events-and-training"},
+                                                            {"GMP-mentors-and-focus-groups"}
+                                                        }, keyb);
+
+                try {
+                    InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                    media->media = GMP_menu_gif;
+                    media->caption = text->at("text-GMP");
+                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                  keyb);
+                }
+                catch (TgException &ex) {
+                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                }
+
+                return;
+            }
+            //GMP-learning-menu
+            if (StringTools::startsWith(query->data, "GMP-learning")) {
+                //db.setCurMenu(query->from->id, CASHFLOW_LEARNING_ST);
+                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                KeyboardGenerator::createInlineKeyboard({{text->at("training for beginners")},
+                                                         {text->at("training for teachers")},
+                                                         {text->at("training for leaders")},
+                                                         {text->at("training for TOP-leaders")},
+                                                         {text->at("back-cashflow")}
+                                                        }, {{"training-for-beginners"},
+                                                            {"training-for-teachers"},
+                                                            {"training-for-leaders"},
+                                                            {"training-for-TOP-leaders"},
+                                                            {"cashflow"}
+                                                        }, keyb);
+
+                try {
+                    InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                    media->media = CashFlow_learning_menu_gif;
+                    media->caption = text->at("text-CashFlow-learning");
+                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                  keyb);
+                }
+                catch (TgException &ex) {
+                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                }
                 return;
             }
 
