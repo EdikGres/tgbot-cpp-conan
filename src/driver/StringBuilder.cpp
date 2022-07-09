@@ -3,8 +3,10 @@
 //
 
 #include <iostream>
+#include <utility>
 #include "StringBuilder.h"
 
+//deprecated
 StringBuilder::StringBuilder(string files[]) {
     StringParser sp(files[0]);
     unordered_map<string,string>* tmp;
@@ -23,22 +25,32 @@ StringBuilder::StringBuilder(string files[]) {
     }
     en = new unordered_map<string,string>(*sp.parseFile());
 
-
 }
 
-StringBuilder::StringBuilder(string *files, DBHandler &db) {
+StringBuilder::StringBuilder(string *files, string links, DBHandler &db) {
     if(files == nullptr)
         exit(-9);
     ru = db.getStrings(files[0]);
     if(ru == nullptr) {
-        exit(-11);
         cout << "RU strings dont create" << endl;
+        exit(-11);
     }
     en = db.getStrings(files[1]);
     if(en == nullptr) {
-        exit(-11);
         cout << "EN strings dont create" << endl;
+        exit(-11);
     }
+    this->links = db.getLinks(std::move(links));
+    if(this->links == nullptr){
+        cout << "links strings dont create" << endl;
+        exit(-11);
+    }
+    GMP_beginners_themes = db.getRequest("SELECT * FROM links WHERE key_str LIKE 'GMP-beginners-themes-%'");
+//    cout << GMP_beginners_themes->size() << endl;
+//    for (auto& el : *GMP_beginners_themes) {
+//        cout << el.first << " : " << el.second << endl;
+//    }
+
 }
 
 unordered_map<string, string> *StringBuilder::getRu() const {
@@ -52,6 +64,16 @@ unordered_map<string, string> *StringBuilder::getEn() const {
 StringBuilder::~StringBuilder() {
     delete(en);
     delete(ru);
+    delete(links);
+    delete(GMP_beginners_themes);
+}
+
+unordered_map<string, string> *StringBuilder::getLinks() const {
+    return this->links;
+}
+
+unordered_map<string, string> *StringBuilder::getGMP_beginners_themes() const {
+    return GMP_beginners_themes;
 }
 
 

@@ -92,6 +92,10 @@ public:
 
     unordered_map<string,string> *getStrings(string table_name);
 
+    unordered_map<string,string> *getLinks(string table_name);
+
+    unordered_map<string,string> *getRequest(string request);
+
 
 };
 

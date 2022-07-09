@@ -47,7 +47,7 @@ int main() {
 
     //change for deploy
     string files[] = {ru_db, en_db};
-    StringBuilder sb(files, db);
+    StringBuilder sb(files, "links", db);
 
     Bot bot(token);
 

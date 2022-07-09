@@ -15,26 +15,6 @@ extern const string en_locale;
 extern const string ru_db;
 extern const string en_db;
 
-extern const string start_gif;
-extern const string CashFlow_menu_gif;
-extern const string CashFlow_learning_menu_gif;
-extern const string CashFlow_learning_beginners_menu_gif;
-extern const string CashFlow_learning_teachers_menu_gif;
-extern const string CashFlow_learning_leaders_menu_gif;
-extern const string CashFlow_learning_TOPleaders_menu_gif;
-
-extern const string no_access_gif;
-
-extern const string GMP_menu_gif;
-extern const string GMP_learning_menu_gif;
-extern const string GMP_learning_beginners_menu_gif;
-extern const string GMP_learning_teachers_menu_gif;
-extern const string GMP_learning_leaders_menu_gif;
-extern const string GMP_learning_TOPleaders_menu_gif;
-
-extern const unordered_map<int,string> GMP_Beginners_gif;
-
-extern const string GMP_learning_beginners_end;
 
 
 enum state{

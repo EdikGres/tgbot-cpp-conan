@@ -16,7 +16,7 @@ using namespace TgBot;
 
 
 CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &sb
-                                 ) : db(db), sb(sb) {
+) : db(db), sb(sb) {
     //start-------------------------------------
     commands.emplace_back("start");
     bot.getEvents().onCommand("start", [&bot, &db, this, &sb](const Message::Ptr &message) {
@@ -24,24 +24,15 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             db.add_user(message->from->id, message->from->username, 0, 0, 0, 0);
             db.setCurMenu(message->from->id, START_ST);
             unordered_map<string, string> *text = my::get_lang(db, sb, message);
+            unordered_map<string, string> *links = sb.getLinks();
             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
             KeyboardGenerator::createInlineKeyboard({
                                                             {text->at("Cash-Flow"), text->at("GMP")}
-                                                    }, {{"cashflow", "GMP"}},keyb);
-            //language select
-//            KeyboardGenerator::createInlineKeyboard({
-//                                                            {text->at("UK"), text->at("RU")}
-//                                                    }, testInlineKeyboard);
-//            Message::Ptr msg = bot.getApi().sendPhoto(message->from->id,
-//                                                      start_gif,
-//                                                      "", 0, mainKeyboard);
-//
-//            Message::Ptr msg2 = bot.getApi().sendMessage(message->chat->id,
-//                                                         text->at("start-message"), false, 0,
-//                                                         testInlineKeyboard);
+                                                    }, {{"cashflow", "GMP"}}, keyb);
             Message::Ptr msg;
             try {
-                msg = bot.getApi().sendAnimation(message->from->id, start_gif, 0, 0, 0, "", text->at("start-message"),
+                msg = bot.getApi().sendAnimation(message->from->id, links->at("start_gif"), 0, 0, 0, "",
+                                                 text->at("start-message"),
                                                  0, keyb, "HTML");
             }
             catch (TgException &ex) {
@@ -51,15 +42,12 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             my::delete_all_messages(db, sb, message, bot);
             if (msg != nullptr)
                 db.addMessage(message->from->id, msg->messageId, 1);
-            //db.addMessage(message->from->id, msg2->messageId, 1);
-            //db.addMessage(message->from->id, message->messageId, 0);
             try {
                 bot.getApi().deleteMessage(message->from->id, message->messageId);
             }
             catch (TgException &ex) {
                 cerr << ex.what() << endl;
             }
-            //db.deleteMessage(message->from->id, message->messageId);
         });
         t1.detach();
     });
