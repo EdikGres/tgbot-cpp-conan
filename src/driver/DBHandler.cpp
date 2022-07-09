@@ -48,7 +48,9 @@ void DBHandler::error_handle() {
     //exit(1);
 }
 
-int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow, int language) {
+int
+DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow,
+                    int language) {
     if (name.length() > 120)
         return 1;
     m_mutex.lock();
@@ -69,7 +71,8 @@ int DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int acc
         return 3;
     }
     if (mysql_num_rows(result) == 0) {
-        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, 0, %d, %d, %d, 0)", tg_id, name.c_str(), cur_menu,
+        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, %d, %d, %d, 0, 0, 0, 0, 0, 0, 0, 0, 0)", tg_id,
+                name.c_str(), cur_menu,
                 access_level_GMP, access_level_CashFlow, language);
         if (mysql_query(con, buffer)) {
             error_handle();
@@ -586,10 +589,26 @@ int DBHandler::getIsSpammer(int64_t tg_id) {
     return ret;
 }
 
-int DBHandler::getCurText(int64_t tg_id) {
+int DBHandler::getCurTextGMP(int64_t tg_id, int section) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "SELECT CurrentText FROM users WHERE tg_id = %lld", tg_id);
+    switch (section) {
+        case 0:
+            sprintf(buffer, "SELECT TextGMPBeginners FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 1:
+            sprintf(buffer, "SELECT TextGMPTeachers FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 2:
+            sprintf(buffer, "SELECT TextGMPLeaders FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 3:
+            sprintf(buffer, "SELECT TextGMPTOPLeaders FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        default:
+            return -1;
+    }
+
     if (mysql_query(con, buffer)) {
         error_handle();
         free(buffer);
@@ -620,10 +639,107 @@ int DBHandler::getCurText(int64_t tg_id) {
     return res;
 }
 
-void DBHandler::setCurText(int64_t tg_id, int cur_text) {
+int DBHandler::getCurTextCashFlow(int64_t tg_id, int section) {
     m_mutex.lock();
     char *buffer = (char *) malloc(1024);
-    sprintf(buffer, "UPDATE users SET CurrentText = %d WHERE tg_id = %lld", cur_text, tg_id);
+    switch (section) {
+        case 0:
+            sprintf(buffer, "SELECT TextCashFlowBeginners FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 1:
+            sprintf(buffer, "SELECT TextCashFlowTeachers FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 2:
+            sprintf(buffer, "SELECT TextCashFlowLeaders FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        case 3:
+            sprintf(buffer, "SELECT TextCashFlowTOPLeaders FROM users WHERE tg_id = %lld", tg_id);
+            break;
+        default:
+            return -1;
+    }
+
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    if (mysql_num_rows(result) == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    int res = atoi(row[0]); //CurrentMenu(mysql field)
+
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
+}
+
+void DBHandler::setCurTextGMP(int64_t tg_id, int section, int cur_text) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    switch (section) {
+        case 0:
+            sprintf(buffer, "UPDATE users SET TextGMPBeginners = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 1:
+            sprintf(buffer, "UPDATE users SET TextGMPTeachers = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 2:
+            sprintf(buffer, "UPDATE users SET TextGMPLeaders = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 3:
+            sprintf(buffer, "UPDATE users SET TextGMPTOPLeaders = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        default:
+            return;
+    }
+
+    if (mysql_query(con, buffer)) {
+        free(buffer);
+        error_handle();
+        m_mutex.unlock();
+        return;
+    }
+
+    free(buffer);
+    m_mutex.unlock();
+}
+
+void DBHandler::setCurTextCashFlow(int64_t tg_id, int section, int cur_text) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    switch (section) {
+        case 0:
+            sprintf(buffer, "UPDATE users SET TextCashFlowBeginners = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 1:
+            sprintf(buffer, "UPDATE users SET TextCashFlowTeachers = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 2:
+            sprintf(buffer, "UPDATE users SET TextCashFlowLeaders = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        case 3:
+            sprintf(buffer, "UPDATE users SET TextCashFlowTOPLeaders = %d WHERE tg_id = %lld", cur_text, tg_id);
+            break;
+        default:
+            return;
+    }
+
     if (mysql_query(con, buffer)) {
         free(buffer);
         error_handle();

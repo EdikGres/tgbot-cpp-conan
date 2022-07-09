@@ -6,6 +6,7 @@
 #define KOSTYA_BOT_STRINGS_H
 
 #include <string>
+#include "unordered_map"
 
 using namespace std;
 
@@ -30,6 +31,10 @@ extern const string GMP_learning_beginners_menu_gif;
 extern const string GMP_learning_teachers_menu_gif;
 extern const string GMP_learning_leaders_menu_gif;
 extern const string GMP_learning_TOPleaders_menu_gif;
+
+extern const unordered_map<int,string> GMP_Beginners_gif;
+
+extern const string GMP_learning_beginners_end;
 
 
 enum state{

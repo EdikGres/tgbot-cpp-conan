@@ -44,7 +44,11 @@ public:
 
     int getCurMenu(int64_t tg_id);
 
-    int getCurText(int64_t tg_id);
+    //0-Beginners,3-TopLeaders
+    int getCurTextGMP(int64_t tg_id, int section);
+
+    //0-Beginners,3-TopLeaders
+    int getCurTextCashFlow(int64_t tg_id, int section);
 
     int getAccessLevelGMP(int64_t tg_id);
 
@@ -58,7 +62,11 @@ public:
 
     void setCurMenu(int64_t tg_id, int cur_menu);
 
-    void setCurText(int64_t tg_id, int cur_text);
+    //0-Beginners,3-TopLeaders
+    void setCurTextGMP(int64_t tg_id, int section, int cur_text);
+
+    //0-Beginners,3-TopLeaders
+    void setCurTextCashFlow(int64_t tg_id, int section, int cur_text);
 
     void setAccessLevelGMP(int64_t tg_id, int cur_level);
 
