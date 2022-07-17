@@ -39,7 +39,6 @@ int main() {
 
 
 
-
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
 

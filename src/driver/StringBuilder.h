@@ -28,12 +28,21 @@ public:
 
     unordered_map<string, string> *getGMP_beginners_themes() const;
 
+    unordered_map<string, string> *getGmpTeachersThemes() const;
+
+    unordered_map<string, string> *getGmpLeadersThemes() const;
+
+    unordered_map<string, string> *getGmpTopLeadersThemes() const;
+
 private:
     unordered_map<string, string> *ru;
     unordered_map<string, string> *en;
     unordered_map<string, string> *links;
 
     unordered_map<string, string> *GMP_beginners_themes;
+    unordered_map<string, string> *GMP_teachers_themes;
+    unordered_map<string, string> *GMP_leaders_themes;
+    unordered_map<string, string> *GMP_TOP_leaders_themes;
 };
 
 

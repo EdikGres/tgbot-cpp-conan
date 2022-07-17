@@ -19,8 +19,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
         thread t1([&bot, &db, &sb, query, this]() {
             //DEBUG
             cout << "query: " << query->data << endl;
-            unordered_map<string, string> *text = my::get_lang(db, sb, query);
-            unordered_map<string, string> *links = sb.getLinks();
+            unordered_map <string, string> *text = my::get_lang(db, sb, query);
+            unordered_map <string, string> *links = sb.getLinks();
             int cur_menu = db.getCurMenu(query->from->id);
             //optimize in 1 !!!
             int cur_access_CashFlow = db.getAccessLevelCashFlow(query->from->id);
@@ -344,6 +344,60 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         //GMP-Learning-Beginners-materials
                         if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials")) {
 
+                            //GMP-Learning-Beginners-materials-promo-clip
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pc")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-negotiation
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-negotiation")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-objections
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-objections")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-scripts-1
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-scripts-2
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-useful-links
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-ul")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-basic-education
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-be")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-practical-training
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pt")) {
+
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-materials-answers-on-questions
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-aoq")) {
+
+                                return;
+                            }
+
                             //GMP-Learning-Beginners-materials-presentation
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-presentation")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
@@ -556,7 +610,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("CashFlow_learning_beginners_menu_gif");
+                            media->media = links->at("GMP_learning_beginners_menu_gif");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-beginners");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -567,7 +621,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         return;
                     }
 
-                    //CashFlow-Learning-forTeachers MENU=3
+                    //GMP-Learning-forTeachers MENU=3
                     if (StringTools::startsWith(query->data, "GMP-learning-teachers")) {
                         if (cur_access_GMP < 1) {
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
@@ -586,32 +640,180 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
                             return;
                         }
+
+                        //GMP-learning-teachers-materials
+                        if(StringTools::startsWith(query->data, "GMP-learning-teachers-materials")){
+                            return;
+                        }
+
+                        //GMP-Learning-teachers-start
+                        if (StringTools::startsWith(query->data, "GMP-learning-teachers-start")) {
+
+                            //GMP-Learning-teachers-start-next
+                            if (StringTools::startsWith(query->data, "GMP-learning-teachers-start-next")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurTextGMP(query->from->id, 1);
+                                ++cur_text;
+                                //!!!MAX THEMES!!!
+                                if (cur_text >= sb.getGmpTeachersThemes()->size()) {
+                                    db.setCurTextGMP(query->from->id, 1, 0);
+                                    KeyboardGenerator::createInlineKeyboard({{text->at("end-learning")}}, {{"GMP"}},
+                                                                            keyb);
+                                    media->media = links->at("GMP_learning_teachers_end");
+                                    media->parseMode = "HTML";
+                                    media->caption = text->at("GMP-learning-teachers-end");
+                                } else {
+                                    db.setCurTextGMP(query->from->id, 1, cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-teachers-start-back"},
+                                             {"GMP-learning-teachers-start-next"},
+                                             {"GMP-learning-teachers-materials"},
+                                             {"GMP"}}, keyb);
+                                    string str1 = "GMP-teachers-themes-" + to_string(cur_text);
+                                    media->media = sb.getGmpTeachersThemes()->at(str1);
+                                    media->parseMode = "HTML";
+                                    const string str = "GMP-learning-teachers-start-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+                                return;
+                            }
+
+                            //GMP-Learning-teachers-back
+                            if (StringTools::startsWith(query->data, "GMP-learning-teachers-start-back")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurTextGMP(query->from->id, 1);
+                                if (cur_text <= 1) {
+                                    db.setCurTextGMP(query->from->id, 1, 0);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-teachers-start-next"},
+                                             {"GMP-learning-teachers-materials"},
+                                             {"GMP"}}, keyb);
+                                    media->media = sb.getGmpTeachersThemes()->at("GMP-teachers-themes-0");
+                                    media->parseMode = "HTML";
+                                    media->caption = text->at("GMP-learning-teachers-start-t-0");
+                                } else {
+                                    db.setCurTextGMP(query->from->id, 1, --cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-teachers-start-back"},
+                                             {"GMP-learning-teachers-start-next"},
+                                             {"GMP-learning-teachers-materials"},
+                                             {"GMP"}}, keyb);
+                                    string str1 = "GMP-teachers-themes-" + to_string(cur_text);
+                                    media->media = sb.getGmpTeachersThemes()->at(str1);
+                                    media->parseMode = "HTML";
+                                    const string str = "GMP-learning-teachers-start-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+
+                                return;
+                            }
+
+
+                            int cur_text = db.getCurTextGMP(query->from->id, 1);
+                            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            if (cur_text <= 0) {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-teachers-start-next"},
+                                         {"GMP-learning-teachers-materials"},
+                                         {"GMP"}}, keyb);
+                                media->media = sb.getGmpTeachersThemes()->at("GMP-teachers-themes-0");
+                                media->parseMode = "HTML";
+                                media->caption = text->at("GMP-learning-teachers-start-t-0");
+                            } else if (cur_text >= sb.getGmpTeachersThemes()->size()) {
+                                db.setCurTextGMP(query->from->id, 1, 0);
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-teachers-start-next"},
+                                         {"GMP-learning-teachers-materials"},
+                                         {"GMP"}}, keyb);
+                                media->media = sb.getGmpTeachersThemes()->at("GMP-teachers-themes-0");
+                                media->parseMode = "HTML";
+                                media->caption = text->at("GMP-learning-teachers-start-t-0");
+                            } else {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("back")},
+                                         {text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-teachers-start-back"},
+                                         {"GMP-learning-teachers-start-next"},
+                                         {"GMP-learning-teachers-materials"},
+                                         {"GMP"}}, keyb);
+                                string str1 = "GMP-teachers-themes-" + to_string(cur_text);
+                                media->media = sb.getGmpTeachersThemes()->at(str1);
+                                media->parseMode = "HTML";
+                                const string str = "GMP-learning-teachers-start-t-" + to_string(cur_text);
+                                media->caption = text->at(str);
+                            }
+                            try {
+                                bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                              keyb);
+                            }
+                            catch (TgException ex) {
+                                cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                            }
+                            return;
+                        }
+                        //-----------
                         int cur_text = db.getCurTextGMP(query->from->id, 1);
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         if (cur_text == 0) {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("start learning"), text->at("back-menu")},
-                                     {text->at("checklist for mentors")},
-                                     {text->at("materials")}
+                                    {{text->at("start learning")},
+                                     {text->at("back-menu")},
+                                     {text->at("checklist for mentors")}
                                     },
-                                    {{"GMP-learning-teachers-start", "GMP-learning"},
-                                     {"GMP-learning-teachers-checklist-mentors"},
-                                     {"GMP-learning-teachers-materials"}
+                                    {{"GMP-learning-teachers-start"},
+                                     {"GMP-learning"},
+                                     {"GMP-learning-teachers-checklist-mentors"}
                                     }, keyb);
                         } else {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("continue-learning"), text->at("back-menu")},
-                                     {text->at("checklist for mentors")},
-                                     {text->at("materials")}
+                                    {{text->at("continue-learning")},
+                                     {text->at("back-menu")},
+                                     {text->at("checklist for mentors")}
                                     },
-                                    {{"GMP-learning-teachers-start", "GMP-learning"},
-                                     {"GMP-learning-teachers-checklist-mentors"},
-                                     {"GMP-learning-teachers-materials"}
+                                    {{"GMP-learning-teachers-start"},
+                                     {"GMP-learning"},
+                                     {"GMP-learning-teachers-checklist-mentors"}
                                     }, keyb);
                         }
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("CashFlow_learning_teachers_menu_gif");
+                            media->media = links->at("GMP_learning_teachers_menu_gif");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-teachers");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -647,25 +849,29 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         if (cur_text == 0) {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("start learning"), text->at("back-menu")},
+                                    {{text->at("start learning")},
+                                     {text->at("back-menu")},
                                      {text->at("materials")}
                                     },
-                                    {{"GMP-learning-leaders-start", "GMP-learning"},
+                                    {{"GMP-learning-leaders-start"},
+                                     {"GMP-learning"},
                                      {"GMP-learning-leaders-materials"}
                                     }, keyb);
                         } else {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("continue-learning"), text->at("back-menu")},
+                                    {{text->at("continue-learning")},
+                                     {text->at("back-menu")},
                                      {text->at("materials")}
                                     },
-                                    {{"GMP-learning-leaders-start", "GMP-learning"},
+                                    {{"GMP-learning-leaders-start"},
+                                     {"GMP-learning"},
                                      {"GMP-learning-leaders-materials"}
                                     }, keyb);
                         }
 
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("CashFlow_learning_leaders_menu_gif");
+                            media->media = links->at("GMP_learning_leaders_menu_gif");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-leaders");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -719,7 +925,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("CashFlow_learning_TOPleaders_menu_gif");
+                            media->media = links->at("GMP_learning_TOPleaders_menu_gif");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-TOP-leaders");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
