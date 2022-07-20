@@ -19,6 +19,7 @@
 using namespace std;
 using namespace TgBot;
 
+#define KOSTYA
 
 void finish_with_error(MYSQL *con) {
     fprintf(stderr, "%s\n", mysql_error(con));
@@ -27,6 +28,21 @@ void finish_with_error(MYSQL *con) {
 }
 
 int main() {
+#ifdef KOSTYA
+    if (getenv("TOKEN2") == NULL || getenv("MYSQL_PASS") == NULL) {
+        cerr << "ERROR! environment values don't set!" << endl;
+        cerr << "TOKEN: " << getenv("TOKEN2") << endl;
+        cerr << "MYSQL_PASS: " << getenv("MYSQL_PASS") << endl;
+        return -1;
+    }
+    string token(getenv("TOKEN2"));
+    printf("Token: %s\n", token.c_str());
+
+
+    DBHandler db("localhost", "root", getenv("MYSQL_PASS"),
+                 "telegram", 3307, NULL, 0);
+
+#else
     if (getenv("TOKEN") == NULL || getenv("MYSQL_PASS") == NULL) {
         cerr << "ERROR! environment values don't set!" << endl;
         cerr << "TOKEN: " << getenv("TOKEN") << endl;
@@ -37,10 +53,13 @@ int main() {
     printf("Token: %s\n", token.c_str());
 
 
-
-
     DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
                  "telegram", 3306, NULL, 0);
+
+#endif
+
+
+
 
     //auto* callbacks = db.getCallbacks();
 
