@@ -83,10 +83,18 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             //return to select projects
             if (StringTools::startsWith(query->data, "return-to-projects")) {
                 //db.setCurMenu(query->from->id, START_ST);
+                //PLUG
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("Cash-Flow"), text->at("GMP")}
-                                                        }, {{"cashflow", "GMP"}}, keyb);
+                if (query->from->id == 524338144 || query->from->id == 307278021) {
+                    KeyboardGenerator::createInlineKeyboard({
+                                                                    {text->at("Cash-Flow"), text->at("GMP")}
+                                                            }, {{"cashflow", "GMP"}}, keyb);
+                } else {
+                    KeyboardGenerator::createInlineKeyboard({
+                                                                    {text->at("GMP")}
+                                                            }, {{"GMP"}}, keyb);
+                }
+                //PLUG
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
                     media->caption = text->at("start-message");
@@ -116,50 +124,569 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             //CashFlow MENU=1cashflow
             if (StringTools::startsWith(query->data, "cashflow")) {
                 //PLUG
-                try {
-                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                            {{"return-to-projects"}}, keyb);
-                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-                    anim->media = links->at("in_develop");
-                    anim->caption = text->at("in-develop");
-                    anim->parseMode = "HTML";
-                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "", keyb);
-                }
-                catch (TgException ex) {
-                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                }
-
-                return;
+                if(query->from->id != 307278021 && query->from->id != 524338144)
+                    return;
                 //PLUG
 
 
+                //PLUG
+//                try {
+//                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
+//                                                            {{"return-to-projects"}}, keyb);
+//                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+//                    anim->media = links->at("in_develop_CashFlow");
+//                    anim->caption = text->at("in-develop");
+//                    anim->parseMode = "HTML";
+//                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "", keyb);
+//                }
+//                catch (TgException ex) {
+//                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                }
+//
+//                return;
+                //PLUG
 
+                //CashFlow-materials
+                if(StringTools::startsWith(query->data, "cashflow-materials")){
+                    goto cashflow_materials;
+                    return;
+                }
 
                 //CashFlow-Learning MENU=2
                 if (StringTools::startsWith(query->data, "cashflow-learning")) {
 
                     //CashFlow-Learning-forBeginners MENU=3
                     if (StringTools::startsWith(query->data, "cashflow-learning-beginners")) {
-                        //db.setCurMenu(query->from->id, CASHFLOW_BEGINNERS_LEARNING);
+
+                        //CashFlow-Learning-Beginners-materials
+                        if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials")) {
+                            cashflow_materials:
+
+                            //GMP-Learning-Beginners-materials-promo-clip
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-pc")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
+//                                                                        {{"clear-message"}}, keyb);
+//                                try {
+//                                    Message::Ptr msg;
+//                                    msg = bot.getApi().sendVideo(query->from->id, db.getFile("promo-GMP"), true, 0,
+//                                                                 1920,
+//                                                                 1080, "",
+//                                                                 text->at("GMP-learning-beginners-materials-pc-text"),
+//                                                                 0, keyb, "HTML");
+//
+//                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
+//                                                          "GMP-beginners-materials-promo-clip");
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+//
+
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-negotiation
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-negotiation")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                vector<InlineKeyboardButton::Ptr> row0;
+//                                vector<InlineKeyboardButton::Ptr> row1;
+//                                vector<InlineKeyboardButton::Ptr> row2;
+//                                vector<InlineKeyboardButton::Ptr> row3;
+//                                InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton2(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
+//                                checkButton0->url = links->at("GMP-learning-beginners-materials-negotiation-l-1");
+//                                checkButton0->text = text->at("GMP-learning-beginners-materials-negotiation-l-1");
+//                                checkButton1->url = links->at("GMP-learning-beginners-materials-negotiation-l-2");
+//                                checkButton1->text = text->at("GMP-learning-beginners-materials-negotiation-l-2");
+//                                checkButton2->url = links->at("GMP-learning-beginners-materials-negotiation-l-3");
+//                                checkButton2->text = text->at("GMP-learning-beginners-materials-negotiation-l-3");
+//                                checkButton3->text = text->at("back");
+//                                checkButton3->callbackData = "GMP-learning-beginners-materials-back";
+//                                row0.push_back(checkButton0);
+//                                row1.push_back(checkButton1);
+//                                row2.push_back(checkButton2);
+//                                row3.push_back(checkButton3);
+//                                keyb->inlineKeyboard.push_back(row0);
+//                                keyb->inlineKeyboard.push_back(row1);
+//                                keyb->inlineKeyboard.push_back(row2);
+//                                keyb->inlineKeyboard.push_back(row3);
+//                                try {
+//                                    Message::Ptr msg;
+//
+//                                    msg = bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
+//                                                                          text->at(
+//                                                                                  "GMP-learning-beginners-materials-negotiation-text"),
+//                                                                          "", keyb);
+//
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-objections
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-objections")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
+//                                                                        {{"clear-message"}}, keyb);
+//                                try {
+//                                    Message::Ptr msg;
+//
+//                                    msg = bot.getApi().sendDocument(query->from->id,
+//                                                                    db.getFile("objections"),
+//                                                                    "", text->at(
+//                                                    "GMP-learning-beginners-materials-objections-text"), 0, keyb,
+//                                                                    "HTML");
+//
+//                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
+//                                                          "GMP-beginners-materials-objections");
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+
+                                return;
+                            }
+
+
+                            //CashFlow-Learning-Beginners-materials-scripts
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-s")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                KeyboardGenerator::createInlineKeyboard({{text->at("scripts-1")},
+//                                                                         {text->at("scripts-2")},
+//                                                                         {text->at("back")}},
+//                                                                        {{"GMP-learning-beginners-materials-s-1"},
+//                                                                         {"GMP-learning-beginners-materials-s-2"},
+//                                                                         {"GMP-learning-beginners-materials-back"}},
+//                                                                        keyb);
+//
+//                                //CashFlow-Learning-Beginners-materials-scripts-1
+//                                if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1")) {
+//                                    try {
+//                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+//                                        media->media = links->at("GMP-learning-beginners-materials-s-1");
+//                                        media->caption = text->at("scripts-1-text");
+//                                        media->parseMode = "HTML";
+//                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+//                                                                      "", keyb);
+//                                    }
+//                                    catch (TgException ex) {
+//                                        cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                    }
+//                                    return;
+//                                }
+//
+//                                //CashFlow-Learning-Beginners-materials-scripts-2
+//                                if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2")) {
+//                                    try {
+//                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+//                                        media->media = links->at("GMP-learning-beginners-materials-s-2");
+//                                        media->caption = text->at("scripts-2-text");
+//                                        media->parseMode = "HTML";
+//                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+//                                                                      "", keyb);
+//                                    }
+//                                    catch (TgException ex) {
+//                                        cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                    }
+//                                    return;
+//                                }
+//
+//                                try {
+//                                    bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
+//                                                                    text->at(
+//                                                                            "GMP-learning-beginners-materials-s-text"),
+//                                                                    "", keyb);
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+
+                                return;
+                            }
+
+
+                            //CashFlow-Learning-Beginners-materials-useful-links
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-ul")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                vector<InlineKeyboardButton::Ptr> row0;
+//                                vector<InlineKeyboardButton::Ptr> row1;
+//                                vector<InlineKeyboardButton::Ptr> row2;
+//                                vector<InlineKeyboardButton::Ptr> row3;
+//                                InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton2(new InlineKeyboardButton);
+//                                InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
+//                                checkButton0->url = links->at("GMP-learning-beginners-materials-ul-1");
+//                                checkButton0->text = text->at("GMP-learning-beginners-materials-ul-1");
+//                                checkButton1->url = links->at("GMP-learning-beginners-materials-ul-2");
+//                                checkButton1->text = text->at("GMP-learning-beginners-materials-ul-2");
+////                                checkButton2->url = links->at("GMP-learning-beginners-materials-negotiation-l-3");
+////                                checkButton2->text = text->at("GMP-learning-beginners-materials-negotiation-l-3");
+//                                checkButton3->text = text->at("back");
+//                                checkButton3->callbackData = "GMP-learning-beginners-materials-back";
+//                                row0.push_back(checkButton0);
+//                                row1.push_back(checkButton1);
+////                                row2.push_back(checkButton2);
+//                                row3.push_back(checkButton3);
+//                                keyb->inlineKeyboard.push_back(row0);
+//                                keyb->inlineKeyboard.push_back(row1);
+//                                //keyb->inlineKeyboard.push_back(row2);
+//                                keyb->inlineKeyboard.push_back(row3);
+//                                try {
+//                                    Message::Ptr msg;
+//
+//                                    msg = bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
+//                                                                          text->at(
+//                                                                                  "GMP-learning-beginners-materials-ul-text"),
+//                                                                          "", keyb);
+//
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-basic-education
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-be")) {
+//                                try {
+//                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
+//                                                                            {{"GMP-learning-beginners-materials-back"}},
+//                                                                            keyb);
+//                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+//                                    anim->media = links->at("in_develop");
+//                                    anim->caption = text->at("in-develop");
+//                                    anim->parseMode = "HTML";
+//                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+//                                                                  keyb);
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-practical-training
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-pt")) {
+//                                try {
+//                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
+//                                                                            {{"GMP-learning-beginners-materials-back"}},
+//                                                                            keyb);
+//                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+//                                    anim->media = links->at("in_develop");
+//                                    anim->caption = text->at("in-develop");
+//                                    anim->parseMode = "HTML";
+//                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+//                                                                  keyb);
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-answers-on-questions
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-aoq")) {
+//                                try {
+//                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
+//                                                                            {{"GMP-learning-beginners-materials-back"}},
+//                                                                            keyb);
+//                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+//                                    anim->media = links->at("in_develop");
+//                                    anim->caption = text->at("in-develop");
+//                                    anim->parseMode = "HTML";
+//                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+//                                                                  keyb);
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-materials-presentation
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-presentation")) {
+//                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+//                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
+//                                                                        {{"clear-message"}}, keyb);
+//                                try {
+//                                    Message::Ptr msg;
+//
+//                                    msg = bot.getApi().sendDocument(query->from->id,
+//                                                                    db.getFile("GMP-PARD-presentation"),
+//                                                                    "", text->at(
+//                                                    "GMP-learning-beginners-materials-presentation-text"), 0, keyb,
+//                                                                    "HTML");
+//
+//                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
+//                                                          "GMP-beginners-materials-presentation");
+//                                }
+//                                catch (TgException ex) {
+//                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+//                                }
+                                return;
+                            }
+
+
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-back")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("presentation"), text->at("promo-clip")},
+                                         {text->at("negotiation"),  text->at("objections")},
+                                         {text->at("scripts")},
+                                         {text->at("useful-links")},
+                                         {text->at("basic-education")},
+                                         {text->at("practical-training")},
+                                         {text->at("answers-on-questions")},
+                                         {text->at("clear-message")}},
+                                        {{"cashflow-learning-beginners-materials-presentation",
+                                                 "cashflow-learning-beginners-materials-pc"},
+                                         {"cashflow-learning-beginners-materials-negotiation",
+                                                 "cashflow-learning-beginners-materials-objections"},
+                                         {"cashflow-learning-beginners-materials-s"},
+                                         {"cashflow-learning-beginners-materials-ul"},
+                                         {"cashflow-learning-beginners-materials-be"},
+                                         {"cashflow-learning-beginners-materials-pt"},
+                                         {"cashflow-learning-beginners-materials-aoq"},
+                                         {"clear-message"}},
+                                        keyb);
+                                try {
+                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                                    anim->media = links->at("CashFlow_learning_beginners_materials_img");
+                                    anim->caption = text->at("CashFlow-learning-beginners-materials-text");
+                                    anim->parseMode = "HTML";
+
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+                                return;
+                            }
+
+
+                            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                            KeyboardGenerator::createInlineKeyboard({{text->at("presentation"), text->at("promo-clip")},
+                                                                     {text->at("negotiation"),  text->at("objections")},
+                                                                     {text->at("scripts")},
+                                                                     {text->at("useful-links")},
+                                                                     {text->at("basic-education")},
+                                                                     {text->at("practical-training")},
+                                                                     {text->at("answers-on-questions")},
+                                                                     {text->at("clear-message")}},
+                                                                    {{"cashflow-learning-beginners-materials-presentation",
+                                                                             "cashflow-learning-beginners-materials-pc"},
+                                                                     {"cashflow-learning-beginners-materials-negotiation",
+                                                                             "cashflow-learning-beginners-materials-objections"},
+                                                                     {"cashflow-learning-beginners-materials-s"},
+                                                                     {"cashflow-learning-beginners-materials-ul"},
+                                                                     {"cashflow-learning-beginners-materials-be"},
+                                                                     {"cashflow-learning-beginners-materials-pt"},
+                                                                     {"cashflow-learning-beginners-materials-aoq"},
+                                                                     {"clear-message"}},
+                                                                    keyb);
+                            try {
+                                Message::Ptr msg;
+                                msg = bot.getApi().sendPhoto(query->from->id,
+                                                             links->at("CashFlow_learning_beginners_materials_img"), text->at("CashFlow-learning-beginners-materials-text"), 0, keyb, "HTML");
+                                db.addMessageWithText(query->from->id, msg->messageId, 1, "CashFlow-beginners-materials");
+                            }
+                            catch (TgException ex) {
+                                cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                            }
+                            return;
+                        }
+
+                        //CashFlow-Learning-beginners-start
+                        if (StringTools::startsWith(query->data, "cashflow-learning-beginners-start")) {
+
+                            //CashFlow-Learning-Beginners-start-next
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-start-next")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurTextCashFlow(query->from->id, 0);
+                                ++cur_text;
+                                //!!!MAX THEMES!!!
+                                if (cur_text >= sb.getCashFlowBeginnersThemes()->size()) {
+                                    db.setCurTextCashFlow(query->from->id, 0, 0);
+                                    KeyboardGenerator::createInlineKeyboard({{text->at("end-learning")}}, {{"cashflow"}},
+                                                                            keyb);
+                                    media->media = links->at("CashFlow_learning_beginners_end");
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    media->caption = text->at("CashFlow-learning-beginners-end");
+                                } else {
+                                    db.setCurTextCashFlow(query->from->id, 0, cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"cashflow-learning-beginners-start-back"},
+                                             {"cashflow-learning-beginners-start-next"},
+                                             {"cashflow-learning-beginners-materials"},
+                                             {"cashflow"}}, keyb);
+                                    string str1 = "CashFlow-beginners-themes-" + to_string(cur_text);
+                                    media->media = sb.getCashFlowBeginnersThemes()->at(str1);
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    const string str = "CashFlow-learning-beginners-start-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+                                return;
+                            }
+
+                            //CashFlow-Learning-Beginners-back
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-start-back")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurTextCashFlow(query->from->id, 0);
+                                if (cur_text <= 1) {
+                                    db.setCurTextCashFlow(query->from->id, 0, 0);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"cashflow-learning-beginners-start-next"},
+                                             {"cashflow-learning-beginners-materials"},
+                                             {"cashflow"}}, keyb);
+                                    media->media = sb.getCashFlowBeginnersThemes()->at("CashFlow-beginners-themes-0");
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    media->caption = text->at("CashFlow-learning-beginners-start-t-0");
+                                } else {
+                                    db.setCurTextCashFlow(query->from->id, 0, --cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("materials")},
+                                             {text->at("back-menu")}},
+                                            {{"cashflow-learning-beginners-start-back"},
+                                             {"cashflow-learning-beginners-start-next"},
+                                             {"cashflow-learning-beginners-materials"},
+                                             {"cashflow"}}, keyb);
+                                    string str1 = "CashFlow-beginners-themes-" + to_string(cur_text);
+                                    media->media = sb.getCashFlowBeginnersThemes()->at(str1);
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    const string str = "CashFlow-learning-beginners-start-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+
+                                return;
+                            }
+
+                            int cur_text = db.getCurTextCashFlow(query->from->id, 0);
+                            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            if (cur_text <= 0) {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"cashflow-learning-beginners-start-next"},
+                                         {"cashflow-learning-beginners-materials"},
+                                         {"cashflow"}}, keyb);
+                                media->media = sb.getCashFlowBeginnersThemes()->at("CashFlow-beginners-themes-0");
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                media->caption = text->at("CashFlow-learning-beginners-start-t-0");
+                            } else if (cur_text >= sb.getCashFlowBeginnersThemes()->size()) {
+                                db.setCurTextCashFlow(query->from->id, 0, 0);
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"cashflow-learning-beginners-start-next"},
+                                         {"cashflow-learning-beginners-materials"},
+                                         {"cashflow"}}, keyb);
+                                media->media = sb.getCashFlowBeginnersThemes()->at("CashFlow-beginners-themes-0");
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                media->caption = text->at("CashFlow-learning-beginners-start-t-0");
+                            } else {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("back")},
+                                         {text->at("next")},
+                                         {text->at("materials")},
+                                         {text->at("back-menu")}},
+                                        {{"cashflow-learning-beginners-start-back"},
+                                         {"cashflow-learning-beginners-start-next"},
+                                         {"cashflow-learning-beginners-materials"},
+                                         {"cashflow"}}, keyb);
+                                string str1 = "CashFlow-beginners-themes-" + to_string(cur_text);
+                                media->media = sb.getCashFlowBeginnersThemes()->at(str1);
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                const string str = "CashFlow-learning-beginners-start-t-" + to_string(cur_text);
+                                media->caption = text->at(str);
+                            }
+                            try {
+                                bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                              keyb);
+                            }
+                            catch (TgException ex) {
+                                cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                            }
+                            return;
+                        }
+                        int cur_text = db.getCurTextCashFlow(query->from->id, 0);
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                        KeyboardGenerator::createInlineKeyboard({{text->at("start learning"), text->at("back-menu")},
-                                                                 {text->at("materials")}
-                                                                },
-                                                                {{"cashflow-learning-beginners-start", "cashflow-learning"},
-                                                                 {"cashflow-learning-beginners-materials"}
-                                                                }, keyb);
+                        if (cur_text == 0) {
+                            KeyboardGenerator::createInlineKeyboard(
+                                    {{text->at("start learning")},
+                                     {text->at("back-menu")}},
+                                    {{"cashflow-learning-beginners-start"},
+                                     {"cashflow-learning"}
+                                    }, keyb);
+                        } else {
+                            KeyboardGenerator::createInlineKeyboard(
+                                    {{text->at("continue-learning")},
+                                     {text->at("back-menu")}},
+                                    {{"cashflow-learning-beginners-start"},
+                                     {"cashflow-learning"}
+                                    }, keyb);
+                        }
+
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("CashFlow_learning_beginners_menu_gif");
+                            media->media = links->at("CashFlow_learning_beginners_menu_img");
+                            media->type = InputMedia::TYPE::PHOTO;
                             media->parseMode = "HTML";
-                            media->caption = text->at("text-CashFlow-beginners");
+                            media->caption = text->at("CashFlow-menu-beginners-text");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
                         }
                         catch (TgException &ex) {
                             cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
                         }
                         return;
+
                     }
 
                     //CashFlow-Learning-forTeachers MENU=3
@@ -303,9 +830,10 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                     try {
                         InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                        media->media = links->at("CashFlow_learning_menu_gif");
+                        media->media = links->at("CashFlow_learning_menu_img");
+                        media->type = InputMedia::TYPE::PHOTO;
                         media->parseMode = "HTML";
-                        media->caption = text->at("text-CashFlow-learning");
+                        media->caption = text->at("CashFlow-learning-text");
                         bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
                                                       keyb);
                     }
@@ -334,9 +862,10 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                    media->media = links->at("CashFlow_menu_gif");
+                    media->media = links->at("CashFlow_menu_img");
+                    media->type = InputMedia::TYPE::PHOTO;
                     media->parseMode = "HTML";
-                    media->caption = text->at("text-CashFlow");
+                    media->caption = text->at("CashFlow-text");
                     bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
                                                   keyb);
                 }
@@ -356,7 +885,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             if (StringTools::startsWith(query->data, "GMP")) {
 
                 //GMP-materials
-                if(StringTools::startsWith(query->data, "GMP-materials")){
+                if (StringTools::startsWith(query->data, "GMP-materials")) {
                     goto gmp_materials;
                     return;
                 }
@@ -370,6 +899,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         //GMP-Learning-Beginners-materials
                         if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials")) {
                             gmp_materials:
+
                             //GMP-Learning-Beginners-materials-promo-clip
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pc")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
@@ -377,10 +907,9 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                                         {{"clear-message"}}, keyb);
                                 try {
                                     Message::Ptr msg;
-
-                                    msg = bot.getApi().sendVideo(query->from->id,
-                                                                 InputFile::fromFile("files/promo-GMP.mp4",
-                                                                                     "video/mp4"), true, 0, 0, 0, "",
+                                    msg = bot.getApi().sendVideo(query->from->id, db.getFile("promo-GMP"), true, 0,
+                                                                 1920,
+                                                                 1080, "",
                                                                  text->at("GMP-learning-beginners-materials-pc-text"),
                                                                  0, keyb, "HTML");
 
@@ -447,9 +976,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     Message::Ptr msg;
 
                                     msg = bot.getApi().sendDocument(query->from->id,
-                                                                    InputFile::fromFile(
-                                                                            "files/objections.pdf",
-                                                                            "application/pdf"),
+                                                                    db.getFile("GMP-objections"),
                                                                     "", text->at(
                                                     "GMP-learning-beginners-materials-objections-text"), 0, keyb,
                                                                     "HTML");
@@ -467,52 +994,24 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                             //GMP-Learning-Beginners-materials-scripts
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                KeyboardGenerator::createInlineKeyboard({{text->at("scripts-1")},
+                                                                         {text->at("scripts-2")},
+                                                                         {text->at("back")}},
+                                                                        {{"GMP-learning-beginners-materials-s-1"},
+                                                                         {"GMP-learning-beginners-materials-s-2"},
+                                                                         {"GMP-learning-beginners-materials-back"}},
+                                                                        keyb);
 
                                 //GMP-Learning-Beginners-materials-scripts-1
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1")) {
-                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("GMP-learning-beginners-materials-s-1-s-1")},
-                                                                             {text->at("GMP-learning-beginners-materials-s-1-s-2")},
-                                                                             {text->at("GMP-learning-beginners-materials-s-1-s-3")},
-                                                                             {text->at("back")}},
-                                                                            {{"GMP-learning-beginners-materials-s-1-s-1"},
-                                                                             {"GMP-learning-beginners-materials-s-1-s-2"},
-                                                                             {"GMP-learning-beginners-materials-s-1-s-3"},
-                                                                             {"GMP-learning-beginners-materials-back"}}, keyb);
-
-
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1-s-1")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-1-s1-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1-s-2")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-1-s2-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1-s-3")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-1-s3-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-
-
-
-                                    try{
-                                        bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-1-text"), "", keyb);
+                                    try {
+                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        media->media = links->at("GMP-learning-beginners-materials-s-1");
+                                        media->caption = text->at("scripts-1-text");
+                                        media->parseMode = "HTML";
+                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+                                                                      "", keyb);
                                     }
                                     catch (TgException ex) {
                                         cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -521,66 +1020,21 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 }
 
                                 //GMP-Learning-Beginners-materials-scripts-2
-
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2")) {
-                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("GMP-learning-beginners-materials-s-1-s-1")},
-                                                                             {text->at("GMP-learning-beginners-materials-s-1-s-2")},
-                                                                             {text->at("GMP-learning-beginners-materials-s-1-s-3")},
-                                                                             {text->at("back")}},
-                                                                            {{"GMP-learning-beginners-materials-s-2-s-1"},
-                                                                             {"GMP-learning-beginners-materials-s-2-s-2"},
-                                                                             {"GMP-learning-beginners-materials-s-2-s-3"},
-                                                                             {"GMP-learning-beginners-materials-back"}}, keyb);
-
-
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2-s-1")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-2-s1-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2-s-2")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-2-s2-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-                                    if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2-s-3")) {
-                                        try{
-                                            bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-2-s3-text"), "", keyb);
-                                        }
-                                        catch (TgException ex) {
-                                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                        }
-                                        return;
-                                    }
-
-
-
-                                    try{
-                                        bot.getApi().editMessageCaption(query->from->id, query->message->messageId, text->at("scripts-2-text"), "", keyb);
+                                    try {
+                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        media->media = links->at("GMP-learning-beginners-materials-s-2");
+                                        media->caption = text->at("scripts-2-text");
+                                        media->parseMode = "HTML";
+                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+                                                                      "", keyb);
                                     }
                                     catch (TgException ex) {
                                         cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
                                     }
-
                                     return;
                                 }
 
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("scripts-1"), text->at("scripts-2")},
-                                                                         {text->at("back")}},
-                                                                        {{"GMP-learning-beginners-materials-s-1",
-                                                                          "GMP-learning-beginners-materials-s-2"},
-                                                                         {"GMP-learning-beginners-materials-back"}},
-                                                                        keyb);
                                 try {
                                     bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
                                                                     text->at(
@@ -608,18 +1062,18 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
                                 checkButton0->url = links->at("GMP-learning-beginners-materials-ul-1");
                                 checkButton0->text = text->at("GMP-learning-beginners-materials-ul-1");
-//                                checkButton1->url = links->at("GMP-learning-beginners-materials-negotiation-l-2");
-//                                checkButton1->text = text->at("GMP-learning-beginners-materials-negotiation-l-2");
+                                checkButton1->url = links->at("GMP-learning-beginners-materials-ul-2");
+                                checkButton1->text = text->at("GMP-learning-beginners-materials-ul-2");
 //                                checkButton2->url = links->at("GMP-learning-beginners-materials-negotiation-l-3");
 //                                checkButton2->text = text->at("GMP-learning-beginners-materials-negotiation-l-3");
                                 checkButton3->text = text->at("back");
                                 checkButton3->callbackData = "GMP-learning-beginners-materials-back";
                                 row0.push_back(checkButton0);
-//                                row1.push_back(checkButton1);
+                                row1.push_back(checkButton1);
 //                                row2.push_back(checkButton2);
                                 row3.push_back(checkButton3);
                                 keyb->inlineKeyboard.push_back(row0);
-                               // keyb->inlineKeyboard.push_back(row1);
+                                keyb->inlineKeyboard.push_back(row1);
                                 //keyb->inlineKeyboard.push_back(row2);
                                 keyb->inlineKeyboard.push_back(row3);
                                 try {
@@ -643,12 +1097,14 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 try {
                                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}}, keyb);
+                                                                            {{"GMP-learning-beginners-materials-back"}},
+                                                                            keyb);
                                     InputMediaAnimation::Ptr anim(new InputMediaAnimation());
                                     anim->media = links->at("in_develop");
                                     anim->caption = text->at("in-develop");
                                     anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "", keyb);
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
                                 }
                                 catch (TgException ex) {
                                     cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -661,12 +1117,14 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 try {
                                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}}, keyb);
+                                                                            {{"GMP-learning-beginners-materials-back"}},
+                                                                            keyb);
                                     InputMediaAnimation::Ptr anim(new InputMediaAnimation());
                                     anim->media = links->at("in_develop");
                                     anim->caption = text->at("in-develop");
                                     anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "", keyb);
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
                                 }
                                 catch (TgException ex) {
                                     cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -679,12 +1137,14 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 try {
                                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                     KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}}, keyb);
+                                                                            {{"GMP-learning-beginners-materials-back"}},
+                                                                            keyb);
                                     InputMediaAnimation::Ptr anim(new InputMediaAnimation());
                                     anim->media = links->at("in_develop");
                                     anim->caption = text->at("in-develop");
                                     anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "", keyb);
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
                                 }
                                 catch (TgException ex) {
                                     cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -701,9 +1161,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     Message::Ptr msg;
 
                                     msg = bot.getApi().sendDocument(query->from->id,
-                                                                    InputFile::fromFile(
-                                                                            "files/GMP-PARD-presentation.pdf",
-                                                                            "application/pdf"),
+                                                                    db.getFile("GMP-PARD-presentation"),
                                                                     "", text->at(
                                                     "GMP-learning-beginners-materials-presentation-text"), 0, keyb,
                                                                     "HTML");
@@ -936,19 +1394,24 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         if (cur_text == 0) {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("start learning"), text->at("back-menu")}},
-                                    {{"GMP-learning-beginners-start", "GMP-learning"}
+                                    {{text->at("start learning")},
+                                     {text->at("back-menu")}},
+                                    {{"GMP-learning-beginners-start"},
+                                     {"GMP-learning"}
                                     }, keyb);
                         } else {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("continue-learning"), text->at("back-menu")}},
-                                    {{"GMP-learning-beginners-start", "GMP-learning"}
+                                    {{text->at("continue-learning")},
+                                     {text->at("back-menu")}},
+                                    {{"GMP-learning-beginners-start"},
+                                     {"GMP-learning"}
                                     }, keyb);
                         }
 
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
                             media->media = links->at("GMP_learning_beginners_menu_gif");
+                            media->type = InputMedia::TYPE::PHOTO;
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-beginners");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -1541,10 +2004,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     }, keyb);
                         } else {
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("continue-learning"), text->at("back-menu")},
+                                    {{text->at("continue-learning")},
+                                     {text->at("back-menu")},
                                      {text->at("materials")}
                                     },
-                                    {{"GMP-learning-TOP-leaders-start", "GMP-learning"},
+                                    {{"GMP-learning-TOP-leaders-start"},
+                                     {"GMP-learning"},
                                      {"GMP-learning-TOP-leaders-materials"}
                                     }, keyb);
                         }
@@ -1682,6 +2147,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 try {
                     InputMediaAnimation::Ptr media(new InputMediaAnimation());
                     media->media = links->at("GMP_menu_gif");
+                    media->type = InputMedia::TYPE::PHOTO;
                     media->parseMode = "HTML";
                     media->caption = text->at("text-GMP");
                     bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",

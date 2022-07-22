@@ -25,15 +25,22 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             db.setCurMenu(message->from->id, START_ST);
             unordered_map<string, string> *text = my::get_lang(db, sb, message);
             unordered_map<string, string> *links = sb.getLinks();
+            //PLUG
             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-            KeyboardGenerator::createInlineKeyboard({
-                                                            {text->at("Cash-Flow"), text->at("GMP")}
-                                                    }, {{"cashflow", "GMP"}}, keyb);
+            if(message->from->id == 524338144 || message->from->id == 307278021) {
+                KeyboardGenerator::createInlineKeyboard({
+                                                                {text->at("Cash-Flow"), text->at("GMP")}
+                                                        }, {{"cashflow", "GMP"}}, keyb);
+            }
+            else {
+                KeyboardGenerator::createInlineKeyboard({
+                                                                {text->at("GMP")}
+                                                        }, {{ "GMP"}}, keyb);
+            }
+            //PLUG
             Message::Ptr msg;
             try {
-                msg = bot.getApi().sendAnimation(message->from->id, links->at("start_gif"), 0, 0, 0, "",
-                                                 text->at("start-message"),
-                                                 0, keyb, "HTML");
+                msg = bot.getApi().sendPhoto(message->from->id, links->at("start_gif"), text->at("start-message"), 0, keyb, "HTML");
             }
             catch (TgException &ex) {
                 cerr << ex.what() << endl;
@@ -80,27 +87,23 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 
 
     //test---------------------------------------
-    commands.emplace_back("test");
-    bot.getEvents().onCommand("test", [&bot, &db, &sb, this](const Message::Ptr &message) {
-        thread t1([&bot, &db, &sb, message, this]() {
-            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-            KeyboardGenerator::createInlineKeyboard({{"1", "2", "3"},
-                                                     {"4", "5", "6"},
-                                                     {"7", "8", "9"}}, {{"1-cal", "2-cal", "3-cal"},
-                                                                        {"4-cal", "5-cal", "6-cal"},
-                                                                        {"7-cal", "8-cal", "9-cal"}}, keyb);
-            InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-            try {
-                bot.getApi().sendAnimation(message->from->id, "https://i.ibb.co/7gNYd7j/1.gif", 0, 600, 150, "https://i.ibb.co/7gNYd7j/1.gif",
-                                           "<b>Что необходимо понять каждому?</b>\n"
-                                           "<i>Если ты читаешь это сообщение, то ты на правильном пути. Здесь есть возможность быть простым пользователем маркетплейса GMP PARD и выгодно закрывать свои базовые потребности. А также есть возможность пользоваться инвестиционной площадкой GMP PARD, покупать долю рекламного трафика на реализацию того или иного товара и ежемесячно зарабатывать, в среднем 8-10%. Согласись, что очень классно, когда есть реальный бизнес, который работает, и в то же время даёт возможность не только выгодно совершать покупки, но и получать ежемесячную прибыль, как на пассиве, так и активно строя команду. </i>", 0, NULL, "HTML");
-            }
-            catch (TgException ex) {
-                cerr << ex.what() << endl;
-            }
-        });
-        t1.detach();
-    });
+//    commands.emplace_back("test");
+//    bot.getEvents().onCommand("test", [&bot, &db, &sb, this](const Message::Ptr &message) {
+//        thread t1([&bot, &db, &sb, message, this]() {
+//
+//            try {
+//                Message::Ptr msg;
+//                msg = bot.getApi().sendVideo(message->from->id, InputFile::fromFile("files/promo-GMP.mp4", "video/mp4"), true, 0, 0, 0, "", "test");
+//
+//                db.addFile("promo-GMP", msg->video->fileId);
+//                //cout << db.getFile("promo-GMP") << endl;
+//            }
+//            catch (TgException ex) {
+//                cerr << ex.what() << endl;
+//            }
+//        });
+//        t1.detach();
+//    });
 
 
     //any command----------------------------------

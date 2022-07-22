@@ -49,11 +49,17 @@ StringBuilder::StringBuilder(string *files, string links, DBHandler &db) {
     GMP_teachers_themes = db.getRequest("SELECT * FROM links WHERE key_str LIKE 'GMP-teachers-themes-%'");
     GMP_leaders_themes = db.getRequest("SELECT * FROM links WHERE key_str LIKE 'GMP-leaders-themes-%'");
     GMP_TOP_leaders_themes = db.getRequest("SELECT * FROM links WHERE key_str LIKE 'GMP-TOP-leaders-themes-%'");
+
+    CashFlow_beginners_themes = db.getRequest("SELECT * FROM links WHERE key_str LIKE 'CashFlow-beginners-themes-%'");
 //    cout << GMP_beginners_themes->size() << endl;
 //    for (auto& el : *GMP_beginners_themes) {
 //        cout << el.first << " : " << el.second << endl;
 //    }
 
+}
+
+unordered_map<string, string> *StringBuilder::getCashFlowBeginnersThemes() const {
+    return CashFlow_beginners_themes;
 }
 
 unordered_map<string, string> *StringBuilder::getRu() const {

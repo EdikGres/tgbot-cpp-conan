@@ -80,6 +80,8 @@ public:
 
     int addMessageWithText(int64_t tg_id, int32_t message_id, int32_t isBot, string text);
 
+    int addFile(string filename, string file_id);
+
     int deleteMessage(int64_t tg_id, int32_t message_id);
 
     int deleteMessageUser(int64_t tg_id, int32_t isBot);
@@ -95,6 +97,8 @@ public:
     unordered_map<string,string> *getLinks(string table_name);
 
     unordered_map<string,string> *getRequest(string request);
+
+    string getFile(string filename);
 
 
 };

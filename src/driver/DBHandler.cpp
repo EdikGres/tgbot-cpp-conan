@@ -881,6 +881,62 @@ unordered_map<string, string> *DBHandler::getRequest(string request) {
 
 }
 
+int DBHandler::addFile(string filename, string file_id) {
+    m_mutex.lock();
+    //INSERT INTO users VALUES (NULL, %ld, '%s', %d, %d, %d)
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "INSERT INTO files VALUES ('%s', '%s')", filename.c_str(), file_id.c_str());
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    free(buffer);
+    m_mutex.unlock();
+    return 0;
+}
+
+string DBHandler::getFile(string filename) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT file_id FROM files WHERE filename ='%s'", filename.c_str());
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return {};
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return {};
+    }
+    uint64_t num_fields = mysql_num_rows(result);
+    if (num_fields == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return {};
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    string res{};
+    if (row[0] == NULL) {
+        m_mutex.unlock();
+        return {};
+    }
+    res = row[0];
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
+}
+
 
 
 

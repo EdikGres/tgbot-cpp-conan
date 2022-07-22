@@ -34,6 +34,8 @@ public:
 
     unordered_map<string, string> *getGmpTopLeadersThemes() const;
 
+    unordered_map<string, string> *getCashFlowBeginnersThemes() const;
+
 private:
     unordered_map<string, string> *ru;
     unordered_map<string, string> *en;
@@ -43,6 +45,8 @@ private:
     unordered_map<string, string> *GMP_teachers_themes;
     unordered_map<string, string> *GMP_leaders_themes;
     unordered_map<string, string> *GMP_TOP_leaders_themes;
+
+    unordered_map<string, string> *CashFlow_beginners_themes;
 };
 
 
