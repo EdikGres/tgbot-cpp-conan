@@ -27,20 +27,20 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             unordered_map<string, string> *links = sb.getLinks();
             //PLUG
             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-            if(message->from->id == 524338144 || message->from->id == 307278021) {
+            if (message->from->id == 524338144 || message->from->id == 307278021) {
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("Cash-Flow"), text->at("GMP")}
                                                         }, {{"cashflow", "GMP"}}, keyb);
-            }
-            else {
+            } else {
                 KeyboardGenerator::createInlineKeyboard({
                                                                 {text->at("GMP")}
-                                                        }, {{ "GMP"}}, keyb);
+                                                        }, {{"GMP"}}, keyb);
             }
             //PLUG
             Message::Ptr msg;
             try {
-                msg = bot.getApi().sendPhoto(message->from->id, links->at("start_gif"), text->at("start-message"), 0, keyb, "HTML");
+                msg = bot.getApi().sendPhoto(message->from->id, links->at("start_gif"), text->at("start-message"), 0,
+                                             keyb, "HTML");
             }
             catch (TgException &ex) {
                 cerr << ex.what() << endl;
@@ -93,9 +93,10 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 //
 //            try {
 //                Message::Ptr msg;
-//                msg = bot.getApi().sendVideo(message->from->id, InputFile::fromFile("files/promo-GMP.mp4", "video/mp4"), true, 0, 0, 0, "", "test");
+//                //msg = bot.getApi().sendVideo(message->from->id, InputFile::fromFile("files/promo-GMP.mp4", "video/mp4"), true, 0, 0, 0, "", "test");
 //
-//                db.addFile("promo-GMP", msg->video->fileId);
+//                msg = bot.getApi().sendDocument(message->from->id, InputFile::fromFile("files/cashflow-presentation.pdf", "application/pdf"), "", "test");
+//                db.addFile("cashflow-presentation", msg->document->fileId);
 //                //cout << db.getFile("promo-GMP") << endl;
 //            }
 //            catch (TgException ex) {
@@ -104,6 +105,8 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 //        });
 //        t1.detach();
 //    });
+
+
 
 
     //any command----------------------------------

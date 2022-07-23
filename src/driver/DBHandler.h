@@ -76,6 +76,7 @@ public:
 
     void setIsSpammer(int64_t tg_id, int isSpammer);
 
+
     int addMessage(int64_t tg_id, int32_t message_id, int32_t isBot);
 
     int addMessageWithText(int64_t tg_id, int32_t message_id, int32_t isBot, string text);
