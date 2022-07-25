@@ -71,7 +71,7 @@ DBHandler::add_user(int64_t tg_id, const string &name, int cur_menu, int access_
         return 3;
     }
     if (mysql_num_rows(result) == 0) {
-        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', %d, %d, %d, %d, 0, 0, 0, 0, 0, 0, 0, 0, 0)", tg_id,
+        sprintf(buffer, "INSERT INTO users VALUES (NULL, %lld, '%s', CURRENT_TIMESTAMP() , %d, %d, %d, %d, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)", tg_id,
                 name.c_str(), cur_menu,
                 access_level_GMP, access_level_CashFlow, language);
         if (mysql_query(con, buffer)) {
@@ -936,6 +936,58 @@ string DBHandler::getFile(string filename) {
     m_mutex.unlock();
     return res;
 }
+
+int DBHandler::getCurGMPRegistration(int64_t tg_id) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "SELECT GMPRegistration FROM users WHERE tg_id = %lld", tg_id);
+
+    if (mysql_query(con, buffer)) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    if (result == nullptr) {
+        error_handle();
+        free(buffer);
+        m_mutex.unlock();
+        return -1;
+    }
+    if (mysql_num_rows(result) == 0) {
+        free(buffer);
+        mysql_free_result(result);
+        m_mutex.unlock();
+        return -1;
+    }
+
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    int res = atoi(row[0]);
+
+    mysql_free_result(result);
+    free(buffer);
+    m_mutex.unlock();
+    return res;
+}
+
+void DBHandler::setCurGMPRegistration(int64_t tg_id, int value) {
+    m_mutex.lock();
+    char *buffer = (char *) malloc(1024);
+    sprintf(buffer, "UPDATE users SET GMPRegistration = %d WHERE tg_id = %lld", value, tg_id);
+
+    if (mysql_query(con, buffer)) {
+        free(buffer);
+        error_handle();
+        m_mutex.unlock();
+        return;
+    }
+
+    free(buffer);
+    m_mutex.unlock();
+}
+
 
 
 

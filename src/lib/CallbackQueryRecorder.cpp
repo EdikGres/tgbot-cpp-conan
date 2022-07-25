@@ -124,7 +124,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             //CashFlow MENU=1cashflow
             if (StringTools::startsWith(query->data, "cashflow")) {
                 //PLUG
-                if(query->from->id != 307278021 && query->from->id != 524338144)
+                if (query->from->id != 307278021 && query->from->id != 524338144)
                     return;
                 //PLUG
 
@@ -148,7 +148,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                 //PLUG
 
                 //CashFlow-materials
-                if(StringTools::startsWith(query->data, "cashflow-materials")){
+                if (StringTools::startsWith(query->data, "cashflow-materials")) {
                     goto cashflow_materials;
                     return;
                 }
@@ -186,7 +186,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
                             //CashFlow-Learning-Beginners-materials-negotiation
-                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-negotiation")) {
+                            if (StringTools::startsWith(query->data,
+                                                        "cashflow-learning-beginners-materials-negotiation")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 vector<InlineKeyboardButton::Ptr> row0;
                                 vector<InlineKeyboardButton::Ptr> row1;
@@ -229,7 +230,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
                             //CashFlow-Learning-Beginners-materials-objections
-                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-objections")) {
+                            if (StringTools::startsWith(query->data,
+                                                        "cashflow-learning-beginners-materials-objections")) {
 //                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
 //                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
 //                                                                        {{"clear-message"}}, keyb);
@@ -374,7 +376,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
                             //CashFlow-learning-beginners-materials-binance
-                            if(StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-binance")){
+                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-binance")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
                                                                         {{"clear-message"}}, keyb);
@@ -461,7 +463,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
                             //CashFlow-Learning-Beginners-materials-presentation
-                            if (StringTools::startsWith(query->data, "cashflow-learning-beginners-materials-presentation")) {
+                            if (StringTools::startsWith(query->data,
+                                                        "cashflow-learning-beginners-materials-presentation")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
                                                                         {{"clear-message"}}, keyb);
@@ -550,8 +553,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             try {
                                 Message::Ptr msg;
                                 msg = bot.getApi().sendPhoto(query->from->id,
-                                                             links->at("CashFlow_learning_beginners_materials_img"), text->at("CashFlow-learning-beginners-materials-text"), 0, keyb, "HTML");
-                                db.addMessageWithText(query->from->id, msg->messageId, 1, "CashFlow-beginners-materials");
+                                                             links->at("CashFlow_learning_beginners_materials_img"),
+                                                             text->at("CashFlow-learning-beginners-materials-text"), 0,
+                                                             keyb, "HTML");
+                                db.addMessageWithText(query->from->id, msg->messageId, 1,
+                                                      "CashFlow-beginners-materials");
                             }
                             catch (TgException ex) {
                                 cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -571,7 +577,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 //!!!MAX THEMES!!!
                                 if (cur_text >= sb.getCashFlowBeginnersThemes()->size()) {
                                     db.setCurTextCashFlow(query->from->id, 0, 0);
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("end-learning")}}, {{"cashflow"}},
+                                    KeyboardGenerator::createInlineKeyboard({{text->at("end-learning")}},
+                                                                            {{"cashflow"}},
                                                                             keyb);
                                     media->media = links->at("CashFlow_learning_beginners_end");
                                     media->type = InputMedia::TYPE::PHOTO;
@@ -1185,6 +1192,64 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 return;
                             }
 
+                            //GMP-Learning-Beginners-materials-useful
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-us")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                KeyboardGenerator::createInlineKeyboard({{text->at("GMP-useful-1")},
+                                                                         {text->at("GMP-useful-2")},
+                                                                         {text->at("back")}},
+                                                                        {{"GMP-learning-beginners-materials-us-1"},
+                                                                         {"GMP-learning-beginners-materials-us-2"},
+                                                                         {"GMP-learning-beginners-materials-back"}},
+                                                                        keyb);
+
+                                //GMP-Learning-Beginners-materials-useful-1
+                                if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-us-1")) {
+                                    try {
+                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        media->media = links->at("GMP-learning-beginners-materials-us-1");
+                                        media->caption = text->at("GMP-learning-beginners-materials-us-1-text");
+                                        media->parseMode = "HTML";
+                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+                                                                      "", keyb);
+                                    }
+                                    catch (TgException ex) {
+                                        cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                    }
+                                    return;
+                                }
+
+                                //GMP-Learning-Beginners-materials-useful-2
+                                if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-us-2")) {
+                                    try {
+                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        media->media = links->at("GMP-learning-beginners-materials-us-2");
+                                        media->caption = text->at("GMP-learning-beginners-materials-us-2-text");
+                                        media->parseMode = "HTML";
+                                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId,
+                                                                      "", keyb);
+                                    }
+                                    catch (TgException ex) {
+                                        cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                    }
+                                    return;
+                                }
+
+                                try {
+                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                                    anim->parseMode = "HTML";
+                                    anim->caption = text->at("GMP-learning-beginners-materials-us-text");
+                                    anim->media = links->at("GMP-learning-beginners-materials-us");
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+
+                                return;
+                            }
+
 
                             //GMP-Learning-Beginners-materials-useful-links
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-ul")) {
@@ -1230,7 +1295,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
                             //GMP-learning-beginners-materials-binance
-                            if(StringTools::startsWith(query->data, "GMP-learning-beginners-materials-binance")){
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-binance")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
                                                                         {{"clear-message"}}, keyb);
@@ -1342,6 +1407,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                         {{text->at("presentation"), text->at("promo-clip")},
                                          {text->at("negotiation"),  text->at("objections")},
                                          {text->at("scripts")},
+                                         {text->at("GMP-useful")},
                                          {text->at("useful-links")},
                                          {text->at("registration-binance")},
                                          {text->at("basic-education")},
@@ -1353,6 +1419,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                          {"GMP-learning-beginners-materials-negotiation",
                                                  "GMP-learning-beginners-materials-objections"},
                                          {"GMP-learning-beginners-materials-s"},
+                                         {"GMP-learning-beginners-materials-us"},
                                          {"GMP-learning-beginners-materials-ul"},
                                          {"GMP-learning-beginners-materials-binance"},
                                          {"GMP-learning-beginners-materials-be"},
@@ -1380,6 +1447,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             KeyboardGenerator::createInlineKeyboard({{text->at("presentation"), text->at("promo-clip")},
                                                                      {text->at("negotiation"),  text->at("objections")},
                                                                      {text->at("scripts")},
+                                                                     {text->at("GMP-useful")},
                                                                      {text->at("useful-links")},
                                                                      {text->at("registration-binance")},
                                                                      {text->at("basic-education")},
@@ -1391,6 +1459,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                                      {"GMP-learning-beginners-materials-negotiation",
                                                                              "GMP-learning-beginners-materials-objections"},
                                                                      {"GMP-learning-beginners-materials-s"},
+                                                                     {"GMP-learning-beginners-materials-us"},
                                                                      {"GMP-learning-beginners-materials-ul"},
                                                                      {"GMP-learning-beginners-materials-binance"},
                                                                      {"GMP-learning-beginners-materials-be"},
@@ -1436,10 +1505,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     KeyboardGenerator::createInlineKeyboard(
                                             {{text->at("back")},
                                              {text->at("next")},
+                                             {text->at("GMP-beginners-registration")},
                                              {text->at("materials")},
                                              {text->at("back-menu")}},
                                             {{"GMP-learning-beginners-start-back"},
                                              {"GMP-learning-beginners-start-next"},
+                                             {"GMP-learning-beginners-registration"},
                                              {"GMP-learning-beginners-materials"},
                                              {"GMP"}}, keyb);
                                     string str1 = "GMP-beginners-themes-" + to_string(cur_text);
@@ -1467,9 +1538,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     db.setCurTextGMP(query->from->id, 0, 0);
                                     KeyboardGenerator::createInlineKeyboard(
                                             {{text->at("next")},
+                                             {text->at("GMP-beginners-registration")},
                                              {text->at("materials")},
                                              {text->at("back-menu")}},
                                             {{"GMP-learning-beginners-start-next"},
+                                             {"GMP-learning-beginners-registration"},
                                              {"GMP-learning-beginners-materials"},
                                              {"GMP"}}, keyb);
                                     media->media = sb.getGMP_beginners_themes()->at("GMP-beginners-themes-0");
@@ -1480,10 +1553,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     KeyboardGenerator::createInlineKeyboard(
                                             {{text->at("back")},
                                              {text->at("next")},
+                                             {text->at("GMP-beginners-registration")},
                                              {text->at("materials")},
                                              {text->at("back-menu")}},
                                             {{"GMP-learning-beginners-start-back"},
                                              {"GMP-learning-beginners-start-next"},
+                                             {"GMP-learning-beginners-registration"},
                                              {"GMP-learning-beginners-materials"},
                                              {"GMP"}}, keyb);
                                     string str1 = "GMP-beginners-themes-" + to_string(cur_text);
@@ -1509,9 +1584,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             if (cur_text <= 0) {
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("next")},
+                                         {text->at("GMP-beginners-registration")},
                                          {text->at("materials")},
                                          {text->at("back-menu")}},
                                         {{"GMP-learning-beginners-start-next"},
+                                         {"GMP-learning-beginners-registration"},
                                          {"GMP-learning-beginners-materials"},
                                          {"GMP"}}, keyb);
                                 media->media = sb.getGMP_beginners_themes()->at("GMP-beginners-themes-0");
@@ -1521,9 +1598,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 db.setCurTextGMP(query->from->id, 0, 0);
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("next")},
+                                         {text->at("GMP-beginners-registration")},
                                          {text->at("materials")},
                                          {text->at("back-menu")}},
                                         {{"GMP-learning-beginners-start-next"},
+                                         {"GMP-learning-beginners-registration"},
                                          {"GMP-learning-beginners-materials"},
                                          {"GMP"}}, keyb);
                                 media->media = sb.getGMP_beginners_themes()->at("GMP-beginners-themes-0");
@@ -1533,10 +1612,12 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("back")},
                                          {text->at("next")},
+                                         {text->at("GMP-beginners-registration")},
                                          {text->at("materials")},
                                          {text->at("back-menu")}},
                                         {{"GMP-learning-beginners-start-back"},
                                          {"GMP-learning-beginners-start-next"},
+                                         {"GMP-learning-beginners-registration"},
                                          {"GMP-learning-beginners-materials"},
                                          {"GMP"}}, keyb);
                                 string str1 = "GMP-beginners-themes-" + to_string(cur_text);
@@ -1554,6 +1635,147 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
                             return;
                         }
+
+
+                        //GMP-Learning-beginners-registration
+                        if (StringTools::startsWith(query->data, "GMP-learning-beginners-registration")) {
+
+                            //GMP-Learning-Beginners-registration-next
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-registration-next")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurGMPRegistration(query->from->id);
+                                ++cur_text;
+                                //!!!MAX THEMES!!!
+                                if (cur_text >= sb.getGmpBeginnersRegistrations()->size()-1) {
+                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}}, {{"GMP-learning-beginners-start"}},
+                                                                            keyb);
+                                    string str1 = "GMP-beginners-registration-" + to_string(cur_text);
+                                    media->media = sb.getGmpBeginnersRegistrations()->at(str1);
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    const string str = "GMP-beginners-registration-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                    db.setCurGMPRegistration(query->from->id, 0);
+                                } else {
+                                    db.setCurGMPRegistration(query->from->id, cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-beginners-registration-back"},
+                                             {"GMP-learning-beginners-registration-next"},
+                                             {"GMP-learning-beginners-start"}}, keyb);
+                                    string str1 = "GMP-beginners-registration-" + to_string(cur_text);
+                                    media->media = sb.getGmpBeginnersRegistrations()->at(str1);
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    const string str = "GMP-beginners-registration-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+                                return;
+                            }
+
+                            //GMP-Learning-Beginners-registration-next
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-registration-back")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                int cur_text = db.getCurGMPRegistration(query->from->id);
+                                if (cur_text <= 1) {
+                                    db.setCurGMPRegistration(query->from->id,0);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("next")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-beginners-registration-next"},
+                                             {"GMP-learning-beginners-start"}}, keyb);
+                                    media->media = sb.getGmpBeginnersRegistrations()->at("GMP-beginners-registration-0");
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    media->caption = text->at("GMP-beginners-registration-t-0");
+                                } else {
+                                    db.setCurGMPRegistration(query->from->id,--cur_text);
+                                    KeyboardGenerator::createInlineKeyboard(
+                                            {{text->at("back")},
+                                             {text->at("next")},
+                                             {text->at("back-menu")}},
+                                            {{"GMP-learning-beginners-registration-back"},
+                                             {"GMP-learning-beginners-registration-next"},
+                                             {"GMP-learning-beginners-start"}}, keyb);
+                                    string str1 = "GMP-beginners-registration-" + to_string(cur_text);
+                                    media->media = sb.getGmpBeginnersRegistrations()->at(str1);
+                                    media->type = InputMedia::TYPE::PHOTO;
+                                    media->parseMode = "HTML";
+                                    const string str = "GMP-beginners-registration-t-" + to_string(cur_text);
+                                    media->caption = text->at(str);
+                                }
+                                try {
+                                    bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                                  keyb);
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+
+                                return;
+                            }
+
+                            int cur_text = db.getCurGMPRegistration(query->from->id);
+                            InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            if (cur_text <= 0) {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-beginners-registration-next"},
+                                         {"GMP-learning-beginners-start"}}, keyb);
+                                media->media = sb.getGmpBeginnersRegistrations()->at("GMP-beginners-registration-0");
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                media->caption = text->at("GMP-beginners-registration-t-0");
+                            } else if (cur_text >= sb.getGmpBeginnersRegistrations()->size()) {
+                                db.setCurGMPRegistration(query->from->id, 0);
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("next")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-beginners-registration-next"},
+                                         {"GMP-learning-beginners-start"}}, keyb);
+                                media->media = sb.getGmpBeginnersRegistrations()->at("GMP-beginners-registration-0");
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                media->caption = text->at("GMP-beginners-registration-t-0");
+                            } else {
+                                KeyboardGenerator::createInlineKeyboard(
+                                        {{text->at("back")},
+                                         {text->at("next")},
+                                         {text->at("back-menu")}},
+                                        {{"GMP-learning-beginners-registration-back"},
+                                         {"GMP-learning-beginners-registration-next"},
+                                         {"GMP-learning-beginners-start"}}, keyb);
+                                string str1 = "GMP-beginners-registration-" + to_string(cur_text);
+                                media->media = sb.getGmpBeginnersRegistrations()->at(str1);
+                                media->type = InputMedia::TYPE::PHOTO;
+                                media->parseMode = "HTML";
+                                const string str = "GMP-beginners-registration-t-" + to_string(cur_text);
+                                media->caption = text->at(str);
+                            }
+                            try {
+                                bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                              keyb);
+                            }
+                            catch (TgException ex) {
+                                cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                            }
+                            return;
+                        }
+
+
                         int cur_text = db.getCurTextGMP(query->from->id, 0);
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         if (cur_text == 0) {
@@ -1585,6 +1807,10 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         }
                         return;
                     }
+
+
+
+
 
                     //GMP-Learning-forTeachers MENU=3
                     if (StringTools::startsWith(query->data, "GMP-learning-teachers")) {

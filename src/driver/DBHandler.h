@@ -36,7 +36,8 @@ public:
 
     virtual ~DBHandler();
 
-    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow, int language);
+    int add_user(int64_t tg_id, const string &name, int cur_menu, int access_level_GMP, int access_level_CashFlow,
+                 int language);
 
     bool hasUser(int64_t tg_id);
 
@@ -49,6 +50,8 @@ public:
 
     //0-Beginners,3-TopLeaders
     int getCurTextCashFlow(int64_t tg_id, int section);
+
+    int getCurGMPRegistration(int64_t tg_id);
 
     int getAccessLevelGMP(int64_t tg_id);
 
@@ -68,6 +71,8 @@ public:
     //0-Beginners,3-TopLeaders
     void setCurTextCashFlow(int64_t tg_id, int section, int cur_text);
 
+    void setCurGMPRegistration(int64_t tg_id, int value);
+
     void setAccessLevelGMP(int64_t tg_id, int cur_level);
 
     void setAccessLevelCashFlow(int64_t tg_id, int cur_level);
@@ -75,7 +80,6 @@ public:
     void setLanguage(int64_t tg_id, int cur_language);
 
     void setIsSpammer(int64_t tg_id, int isSpammer);
-
 
     int addMessage(int64_t tg_id, int32_t message_id, int32_t isBot);
 
@@ -93,11 +97,11 @@ public:
 
     list<int32_t> *getAllMessages(int64_t tg_id);
 
-    unordered_map<string,string> *getStrings(string table_name);
+    unordered_map<string, string> *getStrings(string table_name);
 
-    unordered_map<string,string> *getLinks(string table_name);
+    unordered_map<string, string> *getLinks(string table_name);
 
-    unordered_map<string,string> *getRequest(string request);
+    unordered_map<string, string> *getRequest(string request);
 
     string getFile(string filename);
 
