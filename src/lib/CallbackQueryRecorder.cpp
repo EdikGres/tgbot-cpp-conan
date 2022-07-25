@@ -1136,6 +1136,30 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             }
 
 
+                            //GMP-Learning-Beginners-materials-registration-promo-clip
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-promoreg")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
+                                                                        {{"clear-message"}}, keyb);
+                                try {
+                                    Message::Ptr msg;
+                                    msg = bot.getApi().sendVideo(query->from->id, db.getFile("GMP-registration"), true, 0,
+                                                                 720,
+                                                                 1280, "",
+                                                                 text->at("GMP-learning-beginners-materials-promoreg-text"),
+                                                                 0, keyb, "HTML");
+
+                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
+                                                          "GMP-beginners-materials-promoreg");
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+
+
+                                return;
+                            }
+
                             //GMP-Learning-Beginners-materials-scripts
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
@@ -1294,6 +1318,30 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 return;
                             }
 
+                            //GMP-learning-beginners-materials-money
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-money")) {
+                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
+                                                                        {{"clear-message"}}, keyb);
+                                try {
+                                    Message::Ptr msg;
+
+                                    msg = bot.getApi().sendDocument(query->from->id,
+                                                                    db.getFile("GMP-money"),
+                                                                    "", text->at(
+                                                    "GMP-learning-beginners-materials-money-text"), 0, keyb,
+                                                                    "HTML");
+
+                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
+                                                          "GMP-beginners-materials-money");
+                                }
+                                catch (TgException ex) {
+                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                                }
+                                return;
+                            }
+
+
                             //GMP-learning-beginners-materials-binance
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-binance")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
@@ -1406,9 +1454,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("presentation"), text->at("promo-clip")},
                                          {text->at("negotiation"),  text->at("objections")},
+                                         {text->at("promo-registration")},
                                          {text->at("scripts")},
                                          {text->at("GMP-useful")},
                                          {text->at("useful-links")},
+                                         {text->at("GMP-money")},
                                          {text->at("registration-binance")},
                                          {text->at("basic-education")},
                                          {text->at("practical-training")},
@@ -1418,9 +1468,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                  "GMP-learning-beginners-materials-pc"},
                                          {"GMP-learning-beginners-materials-negotiation",
                                                  "GMP-learning-beginners-materials-objections"},
+                                         {"GMP-learning-beginners-materials-promoreg"},
                                          {"GMP-learning-beginners-materials-s"},
                                          {"GMP-learning-beginners-materials-us"},
                                          {"GMP-learning-beginners-materials-ul"},
+                                         {"GMP-learning-beginners-materials-money"},
                                          {"GMP-learning-beginners-materials-binance"},
                                          {"GMP-learning-beginners-materials-be"},
                                          {"GMP-learning-beginners-materials-pt"},
@@ -1446,9 +1498,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                             KeyboardGenerator::createInlineKeyboard({{text->at("presentation"), text->at("promo-clip")},
                                                                      {text->at("negotiation"),  text->at("objections")},
+                                                                     {text->at("promo-registration")},
                                                                      {text->at("scripts")},
                                                                      {text->at("GMP-useful")},
                                                                      {text->at("useful-links")},
+                                                                     {text->at("GMP-money")},
                                                                      {text->at("registration-binance")},
                                                                      {text->at("basic-education")},
                                                                      {text->at("practical-training")},
@@ -1458,9 +1512,11 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                                              "GMP-learning-beginners-materials-pc"},
                                                                      {"GMP-learning-beginners-materials-negotiation",
                                                                              "GMP-learning-beginners-materials-objections"},
+                                                                     {"GMP-learning-beginners-materials-promoreg"},
                                                                      {"GMP-learning-beginners-materials-s"},
                                                                      {"GMP-learning-beginners-materials-us"},
                                                                      {"GMP-learning-beginners-materials-ul"},
+                                                                     {"GMP-learning-beginners-materials-money"},
                                                                      {"GMP-learning-beginners-materials-binance"},
                                                                      {"GMP-learning-beginners-materials-be"},
                                                                      {"GMP-learning-beginners-materials-pt"},

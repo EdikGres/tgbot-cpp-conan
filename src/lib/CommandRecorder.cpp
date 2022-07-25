@@ -86,7 +86,7 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 //    });
 
 
-    //test---------------------------------------
+//    //test---------------------------------------
 //    commands.emplace_back("test");
 //    bot.getEvents().onCommand("test", [&bot, &db, &sb, this](const Message::Ptr &message) {
 //        thread t1([&bot, &db, &sb, message, this]() {
@@ -95,8 +95,8 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
 //                Message::Ptr msg;
 //                //msg = bot.getApi().sendVideo(message->from->id, InputFile::fromFile("files/promo-GMP.mp4", "video/mp4"), true, 0, 0, 0, "", "test");
 //
-//                msg = bot.getApi().sendDocument(message->from->id, InputFile::fromFile("files/cashflow-presentation.pdf", "application/pdf"), "", "test");
-//                db.addFile("cashflow-presentation", msg->document->fileId);
+//                msg = bot.getApi().sendDocument(message->from->id, InputFile::fromFile("files/Как пополнить и распределить в GMP.pdf", "application/pdf"), "", "test");
+//                db.addFile("gmp-money", msg->document->fileId);
 //                //cout << db.getFile("promo-GMP") << endl;
 //            }
 //            catch (TgException ex) {
