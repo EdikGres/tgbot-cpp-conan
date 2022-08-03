@@ -1028,6 +1028,80 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
             //GMP main menu
             if (StringTools::startsWith(query->data, "GMP")) {
 
+                //GMP-about
+                if (StringTools::startsWith(query->data, "GMP-about")) {
+                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
+                    KeyboardGenerator::createInlineKeyboard({{text->at("GMP-market")},
+                                                             {text->at("GMP-pard")},
+                                                             {text->at("GMP-Q&A")},
+                                                             {text->at("back-back")}},
+                                                            {{"GMP-about-market"},
+                                                             {"GMP-about-pard"},
+                                                             {"GMP-about-Q&A"},
+                                                             {"GMP"}}, keyb);
+
+
+                    if (StringTools::startsWith(query->data, "GMP-about-market")) {
+                        try {
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP-about-market");
+                            media->parseMode = "HTML";
+                            media->caption = text->at("GMP-about-market-text");
+                            bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                          keyb);
+                        }
+                        catch (TgException ex) {
+                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                        }
+                        return;
+                    }
+
+                    if (StringTools::startsWith(query->data, "GMP-about-pard")) {
+                        try {
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP-about-pard");
+                            media->parseMode = "HTML";
+                            media->caption = text->at("GMP-about-pard-text");
+                            bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                          keyb);
+                        }
+                        catch (TgException ex) {
+                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                        }
+                        return;
+                    }
+
+                    if (StringTools::startsWith(query->data, "GMP-about-Q&A")) {
+                        try {
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP-about-Q&A");
+                            media->parseMode = "HTML";
+                            media->caption = text->at("GMP-about-Q&A-text");
+                            bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                          keyb);
+                        }
+                        catch (TgException ex) {
+                            cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                        }
+                        return;
+                    }
+
+
+                    try {
+                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                        media->media = links->at("GMP-about");
+                        media->parseMode = "HTML";
+                        media->caption = text->at("GMP-about-text");
+                        bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
+                                                      keyb);
+                    }
+                    catch (TgException ex) {
+                        cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
+                    }
+
+                    return;
+                }
+
                 //GMP-materials
                 if (StringTools::startsWith(query->data, "GMP-materials")) {
                     goto gmp_materials;
@@ -1044,123 +1118,66 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials")) {
                             gmp_materials:
 
-                            //GMP-Learning-Beginners-materials-promo-clip
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pc")) {
+                            //GMP-learning-beginners-materials-pts
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pts")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
+                                KeyboardGenerator::createInlineKeyboard({{text->at("GMP-market"), text->at("GMP-pard")},
+                                                                         {text->at("registration-GMP")},
+                                                                         {text->at("GMP-refill-lk")},
+                                                                         {text->at("deposit-distribution")},
+                                                                         {text->at("deposit-withdrawal")},
+                                                                         {text->at("registration-binance")},
+                                                                         {text->at("objections")},
+                                                                         {text->at("back")}},
+                                                                        {{"GMP-learning-beginners-materials-pts-market", "GMP-learning-beginners-materials-pts-pard"},
+                                                                         {"GMP-learning-beginners-materials-pts-reg"},
+                                                                         {"GMP-learning-beginners-materials-pts-lk"},
+                                                                         {"GMP-learning-beginners-materials-pts-dd"},
+                                                                         {"GMP-learning-beginners-materials-pts-dw"},
+                                                                         {"GMP-learning-beginners-materials-pts-bin"},
+                                                                         {"GMP-learning-beginners-materials-pts-obj"},
+                                                                         {"GMP-learning-beginners-materials-back"}}, keyb);
                                 try {
-                                    Message::Ptr msg;
-                                    msg = bot.getApi().sendVideo(query->from->id, db.getFile("promo-GMP"), true, 0,
-                                                                 1920,
-                                                                 1080, "",
-                                                                 text->at("GMP-learning-beginners-materials-pc-text"),
-                                                                 0, keyb, "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-promo-clip");
+                                    InputMediaPhoto::Ptr anim(new InputMediaPhoto());
+                                    anim->media = links->at("GMP_learning_beginners_materials_pts");
+                                    anim->caption = text->at("GMP-learning-beginners-materials-pts-text");
+                                    anim->parseMode = "HTML";
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
                                 }
                                 catch (TgException ex) {
                                     cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
                                 }
-
-
                                 return;
                             }
 
-                            //GMP-Learning-Beginners-materials-negotiation
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-negotiation")) {
+
+                            //GMP-learning-beginners-materials-videos
+                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-videos")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                vector<InlineKeyboardButton::Ptr> row0;
-                                vector<InlineKeyboardButton::Ptr> row1;
-                                vector<InlineKeyboardButton::Ptr> row2;
-                                vector<InlineKeyboardButton::Ptr> row3;
-                                InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton2(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
-                                checkButton0->url = links->at("GMP-learning-beginners-materials-negotiation-l-1");
-                                checkButton0->text = text->at("GMP-learning-beginners-materials-negotiation-l-1");
-                                checkButton1->url = links->at("GMP-learning-beginners-materials-negotiation-l-2");
-                                checkButton1->text = text->at("GMP-learning-beginners-materials-negotiation-l-2");
-                                checkButton2->url = links->at("GMP-learning-beginners-materials-negotiation-l-3");
-                                checkButton2->text = text->at("GMP-learning-beginners-materials-negotiation-l-3");
-                                checkButton3->text = text->at("back");
-                                checkButton3->callbackData = "GMP-learning-beginners-materials-back";
-                                row0.push_back(checkButton0);
-                                row1.push_back(checkButton1);
-                                row2.push_back(checkButton2);
-                                row3.push_back(checkButton3);
-                                keyb->inlineKeyboard.push_back(row0);
-                                keyb->inlineKeyboard.push_back(row1);
-                                keyb->inlineKeyboard.push_back(row2);
-                                keyb->inlineKeyboard.push_back(row3);
+                                KeyboardGenerator::createInlineKeyboard({{text->at("promo-clip-1")},
+                                                                         {text->at("promo-clip-2")},
+                                                                         {text->at("negotiation")},
+                                                                         {text->at("back")}},
+                                                                        {{"GMP-learning-beginners-materials-videos-pc1"},
+                                                                         {"GMP-learning-beginners-materials-videos-pc2"},
+                                                                         {"GMP-learning-beginners-materials-videos-neg"},
+                                                                         {"GMP-learning-beginners-materials-back"}}, keyb);
                                 try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
-                                                                          text->at(
-                                                                                  "GMP-learning-beginners-materials-negotiation-text"),
-                                                                          "", keyb);
-
+                                    InputMediaPhoto::Ptr anim(new InputMediaPhoto());
+                                    anim->media = links->at("GMP_learning_beginners_materials_videos");
+                                    anim->caption = text->at("GMP-learning-beginners-materials-videos-text");
+                                    anim->parseMode = "HTML";
+                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
+                                                                  keyb);
                                 }
                                 catch (TgException ex) {
                                     cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
                                 }
-
                                 return;
                             }
 
-                            //GMP-Learning-Beginners-materials-objections
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-objections")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
-                                try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().sendDocument(query->from->id,
-                                                                    db.getFile("GMP-objections"),
-                                                                    "", text->at(
-                                                    "GMP-learning-beginners-materials-objections-text"), 0, keyb,
-                                                                    "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-objections");
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-
-                                return;
-                            }
-
-
-                            //GMP-Learning-Beginners-materials-registration-promo-clip
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-promoreg")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
-                                try {
-                                    Message::Ptr msg;
-                                    msg = bot.getApi().sendVideo(query->from->id, db.getFile("GMP-registration"), true, 0,
-                                                                 720,
-                                                                 1280, "",
-                                                                 text->at("GMP-learning-beginners-materials-promoreg-text"),
-                                                                 0, keyb, "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-promoreg");
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-
-
-                                return;
-                            }
-
-                            //GMP-Learning-Beginners-materials-scripts
+                            //GMP-learning-beginners-materials-s
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard({{text->at("scripts-1")},
@@ -1174,7 +1191,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 //GMP-Learning-Beginners-materials-scripts-1
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-1")) {
                                     try {
-                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                         media->media = links->at("GMP-learning-beginners-materials-s-1");
                                         media->caption = text->at("scripts-1-text");
                                         media->parseMode = "HTML";
@@ -1190,7 +1207,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 //GMP-Learning-Beginners-materials-scripts-2
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-s-2")) {
                                     try {
-                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                         media->media = links->at("GMP-learning-beginners-materials-s-2");
                                         media->caption = text->at("scripts-2-text");
                                         media->parseMode = "HTML";
@@ -1230,7 +1247,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 //GMP-Learning-Beginners-materials-useful-1
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-us-1")) {
                                     try {
-                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                         media->media = links->at("GMP-learning-beginners-materials-us-1");
                                         media->caption = text->at("GMP-learning-beginners-materials-us-1-text");
                                         media->parseMode = "HTML";
@@ -1246,7 +1263,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 //GMP-Learning-Beginners-materials-useful-2
                                 if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-us-2")) {
                                     try {
-                                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                         media->media = links->at("GMP-learning-beginners-materials-us-2");
                                         media->caption = text->at("GMP-learning-beginners-materials-us-2-text");
                                         media->parseMode = "HTML";
@@ -1260,7 +1277,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 }
 
                                 try {
-                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                                    InputMediaPhoto::Ptr anim(new InputMediaPhoto());
                                     anim->parseMode = "HTML";
                                     anim->caption = text->at("GMP-learning-beginners-materials-us-text");
                                     anim->media = links->at("GMP-learning-beginners-materials-us");
@@ -1274,217 +1291,23 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 return;
                             }
 
-
-                            //GMP-Learning-Beginners-materials-useful-links
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-ul")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                vector<InlineKeyboardButton::Ptr> row0;
-                                vector<InlineKeyboardButton::Ptr> row1;
-                                vector<InlineKeyboardButton::Ptr> row2;
-                                vector<InlineKeyboardButton::Ptr> row3;
-                                InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton2(new InlineKeyboardButton);
-                                InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
-                                checkButton0->url = links->at("GMP-learning-beginners-materials-ul-1");
-                                checkButton0->text = text->at("GMP-learning-beginners-materials-ul-1");
-                                checkButton1->url = links->at("GMP-learning-beginners-materials-ul-2");
-                                checkButton1->text = text->at("GMP-learning-beginners-materials-ul-2");
-//                                checkButton2->url = links->at("GMP-learning-beginners-materials-negotiation-l-3");
-//                                checkButton2->text = text->at("GMP-learning-beginners-materials-negotiation-l-3");
-                                checkButton3->text = text->at("back");
-                                checkButton3->callbackData = "GMP-learning-beginners-materials-back";
-                                row0.push_back(checkButton0);
-                                row1.push_back(checkButton1);
-//                                row2.push_back(checkButton2);
-                                row3.push_back(checkButton3);
-                                keyb->inlineKeyboard.push_back(row0);
-                                keyb->inlineKeyboard.push_back(row1);
-                                //keyb->inlineKeyboard.push_back(row2);
-                                keyb->inlineKeyboard.push_back(row3);
-                                try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().editMessageCaption(query->from->id, query->message->messageId,
-                                                                          text->at(
-                                                                                  "GMP-learning-beginners-materials-ul-text"),
-                                                                          "", keyb);
-
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-
-                                return;
-                            }
-
-                            //GMP-learning-beginners-materials-money
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-money")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
-                                try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().sendDocument(query->from->id,
-                                                                    db.getFile("GMP-money"),
-                                                                    "", text->at(
-                                                    "GMP-learning-beginners-materials-money-text"), 0, keyb,
-                                                                    "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-money");
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-
-                            //GMP-learning-beginners-materials-binance
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-binance")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
-                                try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().sendDocument(query->from->id,
-                                                                    db.getFile("binance"),
-                                                                    "", text->at(
-                                                    "GMP-learning-beginners-materials-binance-text"), 0, keyb,
-                                                                    "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-binance");
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-                            //GMP-Learning-Beginners-materials-basic-education
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-be")) {
-                                try {
-                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}},
-                                                                            keyb);
-                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-                                    anim->media = links->at("in_develop");
-                                    anim->caption = text->at("in-develop");
-                                    anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
-                                                                  keyb);
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-                            //GMP-Learning-Beginners-materials-practical-training
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-pt")) {
-                                try {
-                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}},
-                                                                            keyb);
-                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-                                    anim->media = links->at("in_develop");
-                                    anim->caption = text->at("in-develop");
-                                    anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
-                                                                  keyb);
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-                            //GMP-Learning-Beginners-materials-answers-on-questions
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-aoq")) {
-                                try {
-                                    InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
-                                                                            {{"GMP-learning-beginners-materials-back"}},
-                                                                            keyb);
-                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-                                    anim->media = links->at("in_develop");
-                                    anim->caption = text->at("in-develop");
-                                    anim->parseMode = "HTML";
-                                    bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
-                                                                  keyb);
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-                            //GMP-Learning-Beginners-materials-presentation
-                            if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-presentation")) {
-                                InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                KeyboardGenerator::createInlineKeyboard({{text->at("clear-message")}},
-                                                                        {{"clear-message"}}, keyb);
-                                try {
-                                    Message::Ptr msg;
-
-                                    msg = bot.getApi().sendDocument(query->from->id,
-                                                                    db.getFile("GMP-PARD-presentation"),
-                                                                    "", text->at(
-                                                    "GMP-learning-beginners-materials-presentation-text"), 0, keyb,
-                                                                    "HTML");
-
-                                    db.addMessageWithText(query->from->id, msg->messageId, 1,
-                                                          "GMP-beginners-materials-presentation");
-                                }
-                                catch (TgException ex) {
-                                    cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
-                                }
-                                return;
-                            }
-
-
+                            //GMP-learning-beginners-materials-back
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-back")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard(
-                                        {{text->at("presentation"), text->at("promo-clip")},
-                                         {text->at("negotiation"),  text->at("objections")},
-                                         {text->at("promo-registration")},
-                                         {text->at("scripts")},
-                                         {text->at("GMP-useful")},
-                                         {text->at("useful-links")},
-                                         {text->at("GMP-money")},
-                                         {text->at("registration-binance")},
-                                         {text->at("basic-education")},
-                                         {text->at("practical-training")},
-                                         {text->at("answers-on-questions")},
+                                        {{text->at("presentation"), text->at("video-materials")},
+                                         {text->at("scripts"),      text->at("useful-links")},
+                                         {text->at("event-records")},
                                          {text->at("clear-message")}},
-                                        {{"GMP-learning-beginners-materials-presentation",
-                                                 "GMP-learning-beginners-materials-pc"},
-                                         {"GMP-learning-beginners-materials-negotiation",
-                                                 "GMP-learning-beginners-materials-objections"},
-                                         {"GMP-learning-beginners-materials-promoreg"},
-                                         {"GMP-learning-beginners-materials-s"},
-                                         {"GMP-learning-beginners-materials-us"},
-                                         {"GMP-learning-beginners-materials-ul"},
-                                         {"GMP-learning-beginners-materials-money"},
-                                         {"GMP-learning-beginners-materials-binance"},
-                                         {"GMP-learning-beginners-materials-be"},
-                                         {"GMP-learning-beginners-materials-pt"},
-                                         {"GMP-learning-beginners-materials-aoq"},
-                                         {"clear-message"}},
-                                        keyb);
+                                        {{"GMP-learning-beginners-materials-pts", "GMP-learning-beginners-materials-videos"},
+                                         {"GMP-learning-beginners-materials-s",   "GMP-learning-beginners-materials-us"},
+                                         {"GMP-learning-beginners-materials-er"},
+                                         {"clear-message"}}, keyb);
                                 try {
-                                    InputMediaAnimation::Ptr anim(new InputMediaAnimation());
-                                    anim->media = links->at("GMP_learning_beginners_materials_gif");
+                                    InputMediaPhoto::Ptr anim(new InputMediaPhoto());
+                                    anim->media = links->at("GMP_learning_beginners_materials");
                                     anim->caption = text->at("GMP-learning-beginners-materials-text");
                                     anim->parseMode = "HTML";
-
                                     bot.getApi().editMessageMedia(anim, query->from->id, query->message->messageId, "",
                                                                   keyb);
                                 }
@@ -1496,46 +1319,27 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
 
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                            KeyboardGenerator::createInlineKeyboard({{text->at("presentation"), text->at("promo-clip")},
-                                                                     {text->at("negotiation"),  text->at("objections")},
-                                                                     {text->at("promo-registration")},
-                                                                     {text->at("scripts")},
-                                                                     {text->at("GMP-useful")},
-                                                                     {text->at("useful-links")},
-                                                                     {text->at("GMP-money")},
-                                                                     {text->at("registration-binance")},
-                                                                     {text->at("basic-education")},
-                                                                     {text->at("practical-training")},
-                                                                     {text->at("answers-on-questions")},
-                                                                     {text->at("clear-message")}},
-                                                                    {{"GMP-learning-beginners-materials-presentation",
-                                                                             "GMP-learning-beginners-materials-pc"},
-                                                                     {"GMP-learning-beginners-materials-negotiation",
-                                                                             "GMP-learning-beginners-materials-objections"},
-                                                                     {"GMP-learning-beginners-materials-promoreg"},
-                                                                     {"GMP-learning-beginners-materials-s"},
-                                                                     {"GMP-learning-beginners-materials-us"},
-                                                                     {"GMP-learning-beginners-materials-ul"},
-                                                                     {"GMP-learning-beginners-materials-money"},
-                                                                     {"GMP-learning-beginners-materials-binance"},
-                                                                     {"GMP-learning-beginners-materials-be"},
-                                                                     {"GMP-learning-beginners-materials-pt"},
-                                                                     {"GMP-learning-beginners-materials-aoq"},
-                                                                     {"clear-message"}},
-                                                                    keyb);
+                            KeyboardGenerator::createInlineKeyboard(
+                                    {{text->at("presentation"), text->at("video-materials")},
+                                     {text->at("scripts"),      text->at("useful-links")},
+                                     {text->at("event-records")},
+                                     {text->at("clear-message")}},
+                                    {{"GMP-learning-beginners-materials-pts", "GMP-learning-beginners-materials-videos"},
+                                     {"GMP-learning-beginners-materials-s",   "GMP-learning-beginners-materials-us"},
+                                     {"GMP-learning-beginners-materials-er"},
+                                     {"clear-message"}}, keyb);
                             try {
                                 Message::Ptr msg;
-                                msg = bot.getApi().sendAnimation(query->from->id,
-                                                                 links->at("GMP_learning_beginners_materials_gif"),
-                                                                 0, 0,
-                                                                 0, "",
-                                                                 text->at("GMP-learning-beginners-materials-text"),
-                                                                 0, keyb, "HTML");
+                                msg = bot.getApi().sendPhoto(query->from->id,
+                                                             links->at("GMP_learning_beginners_materials"),
+                                                             text->at("GMP-learning-beginners-materials-text"), 0, keyb,
+                                                             "HTML");
                                 db.addMessageWithText(query->from->id, msg->messageId, 1, "GMP-beginners-materials");
                             }
                             catch (TgException ex) {
                                 cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
                             }
+
                             return;
                         }
 
@@ -1703,8 +1507,9 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 int cur_text = db.getCurGMPRegistration(query->from->id);
                                 ++cur_text;
                                 //!!!MAX THEMES!!!
-                                if (cur_text >= sb.getGmpBeginnersRegistrations()->size()-1) {
-                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}}, {{"GMP-learning-beginners-start"}},
+                                if (cur_text >= sb.getGmpBeginnersRegistrations()->size() - 1) {
+                                    KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
+                                                                            {{"GMP-learning-beginners-start"}},
                                                                             keyb);
                                     string str1 = "GMP-beginners-registration-" + to_string(cur_text);
                                     media->media = sb.getGmpBeginnersRegistrations()->at(str1);
@@ -1745,18 +1550,19 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                 InputMediaAnimation::Ptr media(new InputMediaAnimation());
                                 int cur_text = db.getCurGMPRegistration(query->from->id);
                                 if (cur_text <= 1) {
-                                    db.setCurGMPRegistration(query->from->id,0);
+                                    db.setCurGMPRegistration(query->from->id, 0);
                                     KeyboardGenerator::createInlineKeyboard(
                                             {{text->at("next")},
                                              {text->at("back-menu")}},
                                             {{"GMP-learning-beginners-registration-next"},
                                              {"GMP-learning-beginners-start"}}, keyb);
-                                    media->media = sb.getGmpBeginnersRegistrations()->at("GMP-beginners-registration-0");
+                                    media->media = sb.getGmpBeginnersRegistrations()->at(
+                                            "GMP-beginners-registration-0");
                                     media->type = InputMedia::TYPE::PHOTO;
                                     media->parseMode = "HTML";
                                     media->caption = text->at("GMP-beginners-registration-t-0");
                                 } else {
-                                    db.setCurGMPRegistration(query->from->id,--cur_text);
+                                    db.setCurGMPRegistration(query->from->id, --cur_text);
                                     KeyboardGenerator::createInlineKeyboard(
                                             {{text->at("back")},
                                              {text->at("next")},
@@ -1852,7 +1658,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                         try {
                             InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("GMP_learning_beginners_menu_gif");
+                            media->media = links->at("GMP_learning_beginners_menu");
                             media->type = InputMedia::TYPE::PHOTO;
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-beginners");
@@ -1899,7 +1705,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-teachers-start-next
                             if (StringTools::startsWith(query->data, "GMP-learning-teachers-start-next")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 1);
                                 ++cur_text;
                                 //!!!MAX THEMES!!!
@@ -1940,7 +1746,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-teachers-back
                             if (StringTools::startsWith(query->data, "GMP-learning-teachers-start-back")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 1);
                                 if (cur_text <= 1) {
                                     db.setCurTextGMP(query->from->id, 1, 0);
@@ -1985,7 +1791,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                             int cur_text = db.getCurTextGMP(query->from->id, 1);
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
                             if (cur_text <= 0) {
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("next")},
@@ -2059,8 +1865,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                     }, keyb);
                         }
                         try {
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("GMP_learning_teachers_menu_gif");
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP_learning_teachers_menu");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-teachers");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -2072,7 +1878,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         return;
                     }
 
-                    //CashFlow-Learning-forLeaders MENU=3
+                    //GMP-Learning-forLeaders MENU=3
                     if (StringTools::startsWith(query->data, "GMP-learning-leaders")) {
                         //db.setCurMenu(query->from->id, CASHFLOW_LEADERS_LEARNING);
                         if (cur_access_GMP < 2) {
@@ -2080,7 +1886,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}
                                                                     }, {{"GMP-learning"}}, keyb);
                             try {
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 media->media = links->at("no_access_gif");
                                 media->parseMode = "HTML";
                                 media->caption = text->at("partition-unavailable");
@@ -2099,7 +1905,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-leaders-start-next
                             if (StringTools::startsWith(query->data, "GMP-learning-leaders-start-next")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 2);
                                 ++cur_text;
                                 //!!!MAX THEMES!!!
@@ -2140,7 +1946,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-leaders-back
                             if (StringTools::startsWith(query->data, "GMP-learning-leaders-start-back")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 2);
                                 if (cur_text <= 1) {
                                     db.setCurTextGMP(query->from->id, 2, 0);
@@ -2185,7 +1991,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                             int cur_text = db.getCurTextGMP(query->from->id, 2);
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
                             if (cur_text <= 0) {
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("next")},
@@ -2261,8 +2067,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         }
 
                         try {
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("GMP_learning_leaders_menu_gif");
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP_learning_leaders_menu");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-leaders");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -2282,7 +2088,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}
                                                                     }, {{"GMP-learning"}}, keyb);
                             try {
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 media->media = links->at("no_access_gif");
                                 media->parseMode = "HTML";
                                 media->caption = text->at("partition-unavailable");
@@ -2301,7 +2107,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-teachers-start-next
                             if (StringTools::startsWith(query->data, "GMP-learning-TOP-leaders-start-next")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 3);
                                 ++cur_text;
                                 //!!!MAX THEMES!!!
@@ -2342,7 +2148,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             //GMP-Learning-TOP-leaders-back
                             if (StringTools::startsWith(query->data, "GMP-learning-TOP-leaders-start-back")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                                InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                                InputMediaPhoto::Ptr media(new InputMediaPhoto());
                                 int cur_text = db.getCurTextGMP(query->from->id, 3);
                                 if (cur_text <= 1) {
                                     db.setCurTextGMP(query->from->id, 3, 0);
@@ -2387,7 +2193,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                             int cur_text = db.getCurTextGMP(query->from->id, 3);
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
                             if (cur_text <= 0) {
                                 KeyboardGenerator::createInlineKeyboard(
                                         {{text->at("next")},
@@ -2461,8 +2267,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         }
 
                         try {
-                            InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                            media->media = links->at("GMP_learning_TOPleaders_menu_gif");
+                            InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                            media->media = links->at("GMP_learning_TOPleaders_menu");
                             media->parseMode = "HTML";
                             media->caption = text->at("text-GMP-menu-TOP-leaders");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "", keyb);
@@ -2489,8 +2295,8 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                                                             }, keyb);
 
                     try {
-                        InputMediaAnimation::Ptr media(new InputMediaAnimation());
-                        media->media = links->at("GMP_learning_menu_gif");
+                        InputMediaPhoto::Ptr media(new InputMediaPhoto());
+                        media->media = links->at("GMP_learning_menu");
                         media->parseMode = "HTML";
                         media->caption = text->at("text-GMP-learning");
                         bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
@@ -2507,7 +2313,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
                                                                 {{"GMP"}}, keyb);
-                        InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                        InputMediaPhoto::Ptr anim(new InputMediaPhoto());
                         anim->media = links->at("in_develop");
                         anim->caption = text->at("in-develop");
                         anim->parseMode = "HTML";
@@ -2525,7 +2331,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
                                                                 {{"GMP"}}, keyb);
-                        InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                        InputMediaPhoto::Ptr anim(new InputMediaPhoto());
                         anim->media = links->at("in_develop");
                         anim->caption = text->at("in-develop");
                         anim->parseMode = "HTML";
@@ -2543,7 +2349,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
                                                                 {{"GMP"}}, keyb);
-                        InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                        InputMediaPhoto::Ptr anim(new InputMediaPhoto());
                         anim->media = links->at("in_develop");
                         anim->caption = text->at("in-develop");
                         anim->parseMode = "HTML";
@@ -2561,7 +2367,7 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         KeyboardGenerator::createInlineKeyboard({{text->at("back-menu")}},
                                                                 {{"GMP"}}, keyb);
-                        InputMediaAnimation::Ptr anim(new InputMediaAnimation());
+                        InputMediaPhoto::Ptr anim(new InputMediaPhoto());
                         anim->media = links->at("in_develop");
                         anim->caption = text->at("in-develop");
                         anim->parseMode = "HTML";
@@ -2576,24 +2382,21 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
 
                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-                KeyboardGenerator::createInlineKeyboard({{text->at("GMP-learning")},
-                                                         {text->at("materials"), text->at("testing")},
-                                                         {text->at("team rules")},
-                                                         {text->at("events and training")},
-                                                         {text->at("mentors and focus groups")},
-                                                         {text->at("return-to-projects")}
-                                                        }, {{"GMP-learning"},
-                                                            {"GMP-materials", "GMP-testing"},
-                                                            {"GMP-team-rules"},
-                                                            {"GMP-events-and-training"},
-                                                            {"GMP-mentors-and-focus-groups"},
-                                                            {"return-to-projects"}
-                                                        }, keyb);
+                KeyboardGenerator::createInlineKeyboard({
+                                                                {text->at("about-company")},
+                                                                {text->at("GMP-learning")},
+                                                                {text->at("materials")},
+                                                                {text->at("GMP-rules")},
+                                                                {text->at("timetable-mp")}
+                                                        }, {{"GMP-about"},
+                                                            {"GMP-learning"},
+                                                            {"GMP-materials"},
+                                                            {"GMP-rules"},
+                                                            {"GMP-timetable-mp"}}, keyb);
 
                 try {
-                    InputMediaAnimation::Ptr media(new InputMediaAnimation());
+                    InputMediaPhoto::Ptr media(new InputMediaPhoto());
                     media->media = links->at("GMP_menu_gif");
-                    media->type = InputMedia::TYPE::PHOTO;
                     media->parseMode = "HTML";
                     media->caption = text->at("text-GMP");
                     bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",

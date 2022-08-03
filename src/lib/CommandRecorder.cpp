@@ -25,21 +25,22 @@ CommandRecorder::CommandRecorder(TgBot::Bot &bot, DBHandler &db, StringBuilder &
             db.setCurMenu(message->from->id, START_ST);
             unordered_map<string, string> *text = my::get_lang(db, sb, message);
             unordered_map<string, string> *links = sb.getLinks();
-            //PLUG
             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
-            if (message->from->id == 524338144 || message->from->id == 307278021) {
-                KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("Cash-Flow"), text->at("GMP")}
-                                                        }, {{"cashflow", "GMP"}}, keyb);
-            } else {
-                KeyboardGenerator::createInlineKeyboard({
-                                                                {text->at("GMP")}
-                                                        }, {{"GMP"}}, keyb);
-            }
-            //PLUG
+            KeyboardGenerator::createInlineKeyboard({
+                                                            {text->at("about-company")},
+                                                            {text->at("GMP-learning")},
+                                                            {text->at("materials")},
+                                                            {text->at("GMP-rules")},
+                                                            {text->at("timetable-mp")}
+                                                    }, {{"GMP-about"},
+                                                        {"GMP-learning"},
+                                                        {"GMP-materials"},
+                                                        {"GMP-rules"},
+                                                        {"GMP-timetable-mp"}}, keyb);
+
             Message::Ptr msg;
             try {
-                msg = bot.getApi().sendPhoto(message->from->id, links->at("start_gif"), text->at("start-message"), 0,
+                msg = bot.getApi().sendPhoto(message->from->id, links->at("GMP_menu_gif"), text->at("start-message"), 0,
                                              keyb, "HTML");
             }
             catch (TgException &ex) {
