@@ -39,8 +39,8 @@ int main() {
     printf("Token: %s\n", token.c_str());
 
 
-    DBHandler db("localhost", "root", getenv("MYSQL_PASS"),
-                 "telegram", 3307, NULL, 0);
+    DBHandler db("62.122.213.42", "root", getenv("MYSQL_PASS"),
+                 "telegram", 3306, NULL, 0);
 
 #else
     if (getenv("TOKEN") == NULL || getenv("MYSQL_PASS") == NULL) {
