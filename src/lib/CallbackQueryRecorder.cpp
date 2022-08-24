@@ -1043,12 +1043,39 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                     if (StringTools::startsWith(query->data, "GMP-about-market")) {
                         try {
+                            InlineKeyboardMarkup::Ptr keyb2(new InlineKeyboardMarkup());
+                            vector<InlineKeyboardButton::Ptr> row0;
+                            vector<InlineKeyboardButton::Ptr> row1;
+                            vector<InlineKeyboardButton::Ptr> row2;
+                            vector<InlineKeyboardButton::Ptr> row3;
+                            InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
+                            InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
+                            InlineKeyboardButton::Ptr checkButton2(new InlineKeyboardButton);
+                            InlineKeyboardButton::Ptr checkButton3(new InlineKeyboardButton);
+                            checkButton0->url = links->at("GMP-about-market-link-1");
+                            checkButton0->text = text->at("GMP-about-market-link-1");
+                            checkButton1->url = links->at("GMP-about-market-link-2");
+                            checkButton1->text = text->at("GMP-about-market-link-2");
+                            checkButton2->url = links->at("GMP-about-market-link-3");
+                            checkButton2->text = text->at("GMP-about-market-link-3");
+                            checkButton3->text = text->at("back");
+                            checkButton3->callbackData = "GMP-about";
+                            row0.push_back(checkButton0);
+                            row1.push_back(checkButton1);
+                            row2.push_back(checkButton2);
+                            row3.push_back(checkButton3);
+                            keyb2->inlineKeyboard.push_back(row0);
+                            keyb2->inlineKeyboard.push_back(row1);
+                            keyb2->inlineKeyboard.push_back(row2);
+                            keyb2->inlineKeyboard.push_back(row3);
+
+
                             InputMediaPhoto::Ptr media(new InputMediaPhoto());
                             media->media = links->at("GMP-about-market");
                             media->parseMode = "HTML";
                             media->caption = text->at("GMP-about-market-text");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
-                                                          keyb);
+                                                          keyb2);
                         }
                         catch (TgException ex) {
                             cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -1058,12 +1085,28 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                     if (StringTools::startsWith(query->data, "GMP-about-pard")) {
                         try {
+                            InlineKeyboardMarkup::Ptr keyb2(new InlineKeyboardMarkup());
+                            vector<InlineKeyboardButton::Ptr> row0;
+                            vector<InlineKeyboardButton::Ptr> row1;
+                            InlineKeyboardButton::Ptr checkButton0(new InlineKeyboardButton);
+                            InlineKeyboardButton::Ptr checkButton1(new InlineKeyboardButton);
+                            checkButton0->url = links->at("GMP-about-pard-link-1");
+                            checkButton0->text = text->at("GMP-about-pard-link-1");
+                            checkButton1->text = text->at("back");
+                            checkButton1->callbackData = "GMP-about";
+                            row0.push_back(checkButton0);
+                            row1.push_back(checkButton1);
+                            keyb2->inlineKeyboard.push_back(row0);
+                            keyb2->inlineKeyboard.push_back(row1);
+
+
+
                             InputMediaPhoto::Ptr media(new InputMediaPhoto());
                             media->media = links->at("GMP-about-pard");
                             media->parseMode = "HTML";
                             media->caption = text->at("GMP-about-pard-text");
                             bot.getApi().editMessageMedia(media, query->from->id, query->message->messageId, "",
-                                                          keyb);
+                                                          keyb2);
                         }
                         catch (TgException ex) {
                             cerr << ex.what() << "\n\tline: " << __LINE__ << endl;
@@ -1301,12 +1344,16 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                     if (StringTools::startsWith(query->data, "GMP-materials-back")) {
                         InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                         KeyboardGenerator::createInlineKeyboard(
-                                {{text->at("presentation"), text->at("video-materials")},
-                                 {text->at("scripts"),      text->at("useful-links")},
+                                {{text->at("presentation")},
+                                 {text->at("video-materials")},
+                                 {text->at("scripts")},
+                                 {text->at("useful-links")},
                                  {text->at("event-records")},
                                  {text->at("back")}},
-                                {{"GMP-materials-pts", "GMP-materials-videos"},
-                                 {"GMP-materials-s",   "GMP-materials-us"},
+                                {{"GMP-materials-pts"},
+                                 {"GMP-materials-videos"},
+                                 {"GMP-materials-s"},
+                                 {"GMP-materials-us"},
                                  {"GMP-materials-er"},
                                  {"GMP"}}, keyb);
                         try {
@@ -1326,12 +1373,16 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                     InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                     KeyboardGenerator::createInlineKeyboard(
-                            {{text->at("presentation"), text->at("video-materials")},
-                             {text->at("scripts"),      text->at("useful-links")},
+                            {{text->at("presentation")},
+                             {text->at("video-materials")},
+                             {text->at("scripts")},
+                             {text->at("useful-links")},
                              {text->at("event-records")},
                              {text->at("back")}},
-                            {{"GMP-materials-pts", "GMP-materials-videos"},
-                             {"GMP-materials-s",   "GMP-materials-us"},
+                            {{"GMP-materials-pts"},
+                             {"GMP-materials-videos"},
+                             {"GMP-materials-s"},
+                             {"GMP-materials-us"},
                              {"GMP-materials-er"},
                              {"GMP"}}, keyb);
                     try {
@@ -1836,12 +1887,16 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
                             if (StringTools::startsWith(query->data, "GMP-learning-beginners-materials-back")) {
                                 InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                                 KeyboardGenerator::createInlineKeyboard(
-                                        {{text->at("presentation"), text->at("video-materials")},
-                                         {text->at("scripts"),      text->at("useful-links")},
+                                        {{text->at("presentation")},
+                                         {text->at("video-materials")},
+                                         {text->at("scripts")},
+                                         {text->at("useful-links")},
                                          {text->at("event-records")},
                                          {text->at("clear-message")}},
-                                        {{"GMP-learning-beginners-materials-pts", "GMP-learning-beginners-materials-videos"},
-                                         {"GMP-learning-beginners-materials-s",   "GMP-learning-beginners-materials-us"},
+                                        {{"GMP-learning-beginners-materials-pts"},
+                                         {"GMP-learning-beginners-materials-videos"},
+                                         {"GMP-learning-beginners-materials-s"},
+                                         {"GMP-learning-beginners-materials-us"},
                                          {"GMP-learning-beginners-materials-er"},
                                          {"clear-message"}}, keyb);
                                 try {
@@ -1861,12 +1916,16 @@ CallbackQueryRecorder::CallbackQueryRecorder(TgBot::Bot &bot, DBHandler &db, Str
 
                             InlineKeyboardMarkup::Ptr keyb(new InlineKeyboardMarkup());
                             KeyboardGenerator::createInlineKeyboard(
-                                    {{text->at("presentation"), text->at("video-materials")},
-                                     {text->at("scripts"),      text->at("useful-links")},
+                                    {{text->at("presentation")},
+                                     {text->at("video-materials")},
+                                     {text->at("scripts")},
+                                     {text->at("useful-links")},
                                      {text->at("event-records")},
                                      {text->at("clear-message")}},
-                                    {{"GMP-learning-beginners-materials-pts", "GMP-learning-beginners-materials-videos"},
-                                     {"GMP-learning-beginners-materials-s",   "GMP-learning-beginners-materials-us"},
+                                    {{"GMP-learning-beginners-materials-pts"},
+                                     {"GMP-learning-beginners-materials-videos"},
+                                     {"GMP-learning-beginners-materials-s"},
+                                     {"GMP-learning-beginners-materials-us"},
                                      {"GMP-learning-beginners-materials-er"},
                                      {"clear-message"}}, keyb);
                             try {

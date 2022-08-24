@@ -18,6 +18,9 @@ DBHandler::DBHandler(const char *host, const char *user, const char *passwd, con
                                                                                             clientflag(clientflag) {
     mysql_library_init;
     con = mysql_init(nullptr);
+    bool reconnect = true;
+    mysql_options(con, MYSQL_OPT_RECONNECT, &reconnect);
+
     if (con == nullptr) {
         fprintf(stderr, "%s\n", mysql_error(con));
         exit(11);
